@@ -386,6 +386,399 @@ input {
     display: none;
 }
 
+/*TIMER PAGE*/
+
+.timer-page {
+    min-height: 100vh;
+
+    width: min(620px, 100%);
+
+    margin: 0 auto;
+
+    padding: 45px 24px 60px;
+}
+
+
+/* Header */
+
+.timer-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+.eyebrow {
+    color: var(--text-soft);
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+.timer-header h1 {
+    font-family: "Manrope", sans-serif;
+
+    font-size: 30px;
+
+    letter-spacing: -0.04em;
+}
+
+.paw-badge {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--purple-light);
+
+    border-radius: 18px;
+
+    font-size: 24px;
+}
+
+
+/* Timer selection card */
+
+.timer-card {
+    background: var(--card);
+
+    border-radius: var(--radius-large);
+
+    padding: 28px;
+
+    box-shadow: var(--shadow);
+}
+
+.timer-card h2 {
+    font-family: "Manrope", sans-serif;
+
+    font-size: 18px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Duration buttons */
+
+.duration-options {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.duration-button {
+    height: 46px;
+
+    border-radius: var(--radius-pill);
+
+    background: #eee7df;
+
+    color: var(--text-soft);
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.duration-button:hover {
+    background: #e6ded5;
+}
+
+.duration-button.active {
+    background: var(--purple);
+
+    color: white;
+
+    box-shadow: 0 8px 18px rgba(139, 120, 197, 0.22);
+}
+
+
+/* Custom duration */
+
+.custom-duration {
+    margin-top: 25px;
+}
+
+.custom-duration label,
+.intention label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.custom-input {
+    position: relative;
+}
+
+.custom-input input {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 55px 0 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-medium);
+
+    background: var(--input);
+
+    color: var(--text);
+}
+
+.custom-input span {
+    position: absolute;
+
+    right: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+}
+
+
+/* Intention */
+
+.intention {
+    margin-top: 20px;
+}
+
+.intention label span {
+    color: var(--text-soft);
+
+    font-weight: 400;
+}
+
+.intention input {
+    width: 100%;
+
+    height: 52px;
+
+    padding: 0 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-medium);
+
+    background: var(--input);
+
+    color: var(--text);
+}
+
+.intention input:focus,
+.custom-input input:focus {
+    outline: none;
+
+    border-color: var(--purple);
+
+    background: white;
+
+    box-shadow: 0 0 0 4px rgba(139, 120, 197, 0.1);
+}
+
+
+/* Start button */
+
+.start-button {
+    width: 100%;
+
+    height: 54px;
+
+    margin-top: 25px;
+
+    border-radius: var(--radius-pill);
+
+    background: var(--purple);
+
+    color: white;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.start-button:hover {
+    background: var(--purple-dark);
+
+    transform: translateY(-1px);
+}
+
+
+/*COUNTDOWN */
+.countdown-card {
+    min-height: 650px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+
+/* Breathing instruction */
+
+.breathing-text {
+    margin-bottom: 28px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    transition: opacity 0.8s ease;
+}
+
+
+/* Gentle breathing circle */
+
+.breathing-circle {
+    width: 210px;
+    height: 210px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(183, 166, 229, 0.16);
+
+    animation: gentle-breathe 6s ease-in-out infinite;
+}
+
+
+/* Cat */
+
+.cat-circle {
+    width: 165px;
+    height: 165px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #d9c6eb,
+        #cbdce9
+    );
+
+    border-radius: 50%;
+
+    font-size: 72px;
+}
+
+
+/* Calm countdown */
+
+.countdown {
+    margin-top: 30px;
+
+    font-family: "Manrope", sans-serif;
+
+    font-size: 46px;
+
+    font-weight: 600;
+
+    letter-spacing: -0.04em;
+
+    color: var(--text);
+}
+
+
+/* Quiet message */
+
+.quiet-message {
+    margin-top: 10px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+
+    transition: opacity 0.5s ease;
+}
+
+
+/* Controls */
+
+.timer-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 32px;
+}
+
+
+.pause-button {
+    width: 140px;
+    height: 46px;
+
+    border-radius: var(--radius-pill);
+
+    background: var(--purple-light);
+
+    color: var(--purple-dark);
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.pause-button:hover {
+    transform: translateY(-1px);
+}
+
+
+.end-button {
+    margin-top: 15px;
+
+    background: transparent;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+}
+
+
+/* Gentle breathing animation */
+
+@keyframes gentle-breathe {
+
+    0%,
+    100% {
+        transform: scale(0.94);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+}
+
+
 /*MOBILE*/
 
 @media (max-width: 600px) {
@@ -409,5 +802,37 @@ input {
         bottom: 5px;
 
         transform: scale(0.7);
+    }
+
+     .timer-page {
+        padding: 30px 18px;
+    }
+
+    .duration-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .timer-card {
+        padding: 22px;
+    }
+
+     .countdown-card {
+        min-height: 580px;
+    }
+
+    .breathing-circle {
+        width: 175px;
+        height: 175px;
+    }
+
+    .cat-circle {
+        width: 140px;
+        height: 140px;
+
+        font-size: 62px;
+    }
+
+    .countdown {
+        font-size: 40px;
     }
 }
