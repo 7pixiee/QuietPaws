@@ -14,80 +14,126 @@
 
     <main id="app">
 
-        <!-- Login view -->
-        <section class="auth-page">
+       <!-- Login view -->
+<section class="auth-page">
 
-            <div class="auth-card">
+    <div class="brand">
 
-                <div class="brand">
-                    <div class="brand-icon">🐾</div>
-                    <h1>QuietPaws</h1>
-                    <p>Take a quiet pause.</p>
-                </div>
+        <div class="brand-icon">
+            🐾
+        </div>
 
-                <div class="auth-heading">
-                    <h2 id="auth-title">Welcome back</h2>
-                    <p id="auth-subtitle">Come back to your quiet little space.</p>
-                </div>
+        <h1>QuietPaws</h1>
 
-                <form id="auth-form">
+        <p>A quiet space for your mind to Relax.</p>
 
-                    <div class="input-group">
-                        <label for="email">Email</label>
+    </div>
 
-                        <input type="email" id="email" placeholder="you@example.com" required>
-                    </div>
 
-                    <div class="input-group">
-                        <label for="password">Password</label>
+    <div class="auth-card">
 
-                        <div class="password-wrapper">
+        <div class="auth-heading">
 
-                            <input type="password" id="password" placeholder="Enter your password" required>
+            <h2 id="auth-title">
+                Welcome back
+            </h2>
 
-                            <button type="button" id="toggle-password">
-                                Show
-                            </button>
+            <p id="auth-subtitle">
+                Come back to your quiet little space.
+            </p>
 
-                        </div>
-                    </div>
+        </div>
 
-                    <div class="input-group confirm-password-group hidden">
-                        <label for="confirm-password">Confirm password</label>
 
-                        <input type="password" id="confirm-password" placeholder="Confirm your password">
-                    </div>
+        <form id="auth-form">
 
-                    <button type="submit" class="primary-button" id="auth-button">
-                        Log in
-                    </button>
+            <div class="input-group">
 
-                </form>
+                <label for="email">
+                    Email
+                </label>
 
-                <p class="auth-switch">
-                    <span id="switch-text">Don't have an account?</span>
-
-                    <button type="button" id="switch-auth">
-                        Create one
-                    </button>
-                </p>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="you@example.com"
+                    required
+                >
 
             </div>
 
-            <div class="auth-decoration">
-                <div class="cloud cloud-one"></div>
-                <div class="cloud cloud-two"></div>
 
-                <div class="cat-illustration">
-                    🐈
+            <div class="input-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="toggle-password"
+                    >
+                        Show
+                    </button>
+
                 </div>
 
-                <div class="star star-one">✦</div>
-                <div class="star star-two">✦</div>
-                <div class="star star-three">✦</div>
             </div>
 
-        </section>
+
+            <div class="input-group confirm-password-group hidden">
+
+                <label for="confirm-password">
+                    Confirm password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirm-password"
+                    placeholder="Confirm your password"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+                id="auth-button"
+            >
+                Log in
+            </button>
+
+        </form>
+
+
+        <p class="auth-switch">
+
+            <span id="switch-text">
+                Don't have an account?
+            </span>
+
+            <button
+                type="button"
+                id="switch-auth"
+            >
+                Create one
+            </button>
+
+        </p>
+
+    </div>
+
+</section>
 
         <!-- Timer view -->
         <section class="timer-page hidden" id="timer-page">
