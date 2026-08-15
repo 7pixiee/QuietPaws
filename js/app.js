@@ -1,499 +1,442 @@
-// LOGIN ELEMENTS
+// ==================== APP ELEMENTS ====================
 
-const authForm = document.querySelector("#auth-form");
+const appView = document.querySelector("#app-view");
+const authView = document.querySelector("#auth-view");
+const revealView = document.querySelector("#reveal-view");
 
-const passwordInput = document.querySelector("#password");
-const togglePassword = document.querySelector("#toggle-password");
+const pages = document.querySelectorAll(".page");
+const navLinks = document.querySelectorAll(".nav-link");
 
-const confirmPasswordGroup =
-    document.querySelector(".confirm-password-group");
 
-const confirmPassword =
-    document.querySelector("#confirm-password");
+// ==================== CAT DATA ====================
 
-const authTitle =
-    document.querySelector("#auth-title");
+const cats = {
+  Luna: {
+    image: "assets/cat3.jpeg",
+    trait: "Naps in sunbeams, ignores everyone",
+    quote: "“The sun is the best blanket.”",
+  },
 
-const authSubtitle =
-    document.querySelector("#auth-subtitle");
+  Mochi: {
+    image: "assets/cat1.jpeg",
+    trait: "Collects quiet moments by the window",
+    quote: "“Slow is a lovely speed.”",
+  },
 
-const authButton =
-    document.querySelector("#auth-button");
+  Poppy: {
+    image: "assets/cat2.jpeg",
+    trait: "Always finds the warmest spot",
+    quote: "“There is time for one more rest.”",
+  },
+};
 
-const switchText =
-    document.querySelector("#switch-text");
 
-const switchAuth =
-    document.querySelector("#switch-auth");
+// ==================== TIMER STATE ====================
 
+let selectedMinutes = 5;
+let totalSeconds = 300;
+let remaining = 300;
 
-const homePage =
-    document.querySelector("#home-page");
+let timerId;
+let running = false;
 
 
-// TIMER ELEMENTS
+// ==================== HOUSE STATE ====================
 
-const timerPage =
-    document.querySelector("#timer-page");
+let catsFound = 3;
+let piecesFound = 2;
+let nextReward = "cat";
 
-const countdownCard =
-    document.querySelector("#countdown-card");
 
-const startTimerButton =
-    document.querySelector("#start-timer");
+// ==================== VIEW MANAGEMENT ====================
 
-const durationButtons =
-    document.querySelectorAll(".duration-button");
+function showView(name) {
+  // Hide the reward screen
+  revealView.classList.add("hidden");
 
-const customMinutesInput =
-    document.querySelector("#custom-minutes");
+  // Show the main application
+  appView.classList.remove("hidden");
 
-const countdown =
-    document.querySelector("#countdown");
+  // Hide all pages
+  pages.forEach((page) => {
+    page.classList.add("hidden");
+  });
 
-const pauseButton =
-    document.querySelector("#pause-timer");
+  // Show the selected page
+  document
+    .querySelector(`#${name}-view`)
+    .classList.remove("hidden");
 
-const endButton =
-    document.querySelector("#end-timer");
+  // Update active navigation link
+  navLinks.forEach((link) => {
+    link.classList.toggle(
+      "active",
+      link.dataset.view === name
+    );
+  });
 
-const progressBar =
-    document.querySelector("#timer-progress-bar");
+  // Update house information whenever House is opened
+  if (name === "house") {
+    updateHouse();
+  }
+}
 
-const breathingText =
-    document.querySelector("#breathing-text");
 
-const revealPage =
-    document.querySelector("#reveal-page");
+// ==================== TIMER ====================
 
-const rewardImage =
-    document.querySelector("#reward-image");
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
 
-const rewardTitle =
-    document.querySelector("#reward-title");
+  const secondsLeft = String(seconds % 60).padStart(2, "0");
 
-const rewardDescription =
-    document.querySelector("#reward-description");
+  return `${minutes}:${secondsLeft}`;
+}
 
-const rewardTag =
-    document.querySelector("#reward-tag");
 
-const seeHomeButton =
-    document.querySelector("#see-home");
+function updateTimer() {
+  const timeDisplay = document.querySelector("#time-display");
+  const timerRing = document.querySelector("#timer-ring");
 
+  // Update the countdown text
+  timeDisplay.textContent = formatTime(remaining);
 
-// AUTH STATE
+  // Update the circular progress
+  timerRing.style.setProperty(
+    "--progress",
+    `${(remaining / totalSeconds) * 100}%`
+  );
+}
 
-let isSignup = false;
 
+function finishSession() {
+  // Stop the timer
+  clearInterval(timerId);
 
-// TIMER STATE
+  running = false;
 
-let selectedMinutes = 10;
+  // Decide which cat will be rewarded
+  const reward =
+    catsFound % 3 === 0
+      ? "Poppy"
+      : catsFound % 2 === 0
+        ? "Mochi"
+        : "Luna";
 
-let totalSeconds = selectedMinutes * 60;
+  // Update progress
+  catsFound++;
+  nextReward = "piece";
 
-let remainingSeconds = totalSeconds;
+  // Update reward screen
+  document.querySelector("#reward-image").src =
+    cats[reward].image;
 
-let timerInterval = null;
+  document.querySelector("#reward-name").textContent =
+    reward;
 
-let isPaused = false;
+  document.querySelector("#reward-trait").textContent =
+    cats[reward].trait;
 
-let completedSessions = 0;
+  document.querySelector("#reward-minutes").textContent =
+    selectedMinutes;
 
-const rewards = [
-    {
-        type: "cat",
-        name: "Mochi",
-        image: "🐱",
-        description: "A gentle little soul has joined your home.",
-        tag: "New Cat"
-    },
+  // Switch from app to reward screen
+  appView.classList.add("hidden");
+  revealView.classList.remove("hidden");
 
-    {
-        type: "item",
-        name: "Cozy Rug",
-        image: "🧶",
-        description: "A soft little rug to make your home warmer.",
-        tag: "House Item"
-    },
+  // Update house progress
+  updateHouse();
+}
 
-    {
-        type: "cat",
-        name: "Biscuit",
-        image: "🐈",
-        description: "Biscuit loves quiet corners and warm naps.",
-        tag: "New Cat"
-    },
 
-    {
-        type: "item",
-        name: "Little Plant",
-        image: "🪴",
-        description: "A tiny plant to bring some life into your home.",
-        tag: "House Item"
-    }
-];
+// ==================== AUTHENTICATION ====================
 
-// SHOW / HIDE PASSWORD
-
-togglePassword.addEventListener("click", () => {
-
-    const isPassword =
-        passwordInput.type === "password";
-
-    passwordInput.type =
-        isPassword ? "text" : "password";
-
-    togglePassword.textContent =
-        isPassword ? "Hide" : "Show";
-
-});
-
-
-// LOGIN ↔ SIGNUP
-
-switchAuth.addEventListener("click", () => {
-
-    isSignup = !isSignup;
-
-    if (isSignup) {
-
-        authTitle.textContent =
-            "Create your account";
-
-        authSubtitle.textContent =
-            "Make a little space for yourself.";
-
-        authButton.textContent =
-            "Create account";
-
-        switchText.textContent =
-            "Already have an account?";
-
-        switchAuth.textContent =
-            "Log in";
-
-        confirmPasswordGroup.classList.remove("hidden");
-
-        confirmPassword.required = true;
-
-    } else {
-
-        authTitle.textContent =
-            "Welcome back";
-
-        authSubtitle.textContent =
-            "Come back to your quiet little space.";
-
-        authButton.textContent =
-            "Log in";
-
-        switchText.textContent =
-            "Don't have an account?";
-
-        switchAuth.textContent =
-            "Create one";
-
-        confirmPasswordGroup.classList.add("hidden");
-
-        confirmPassword.required = false;
-
-    }
-
-});
-
-
-// LOGIN / SIGNUP
-
-authForm.addEventListener("submit", (event) => {
-
+document
+  .querySelector("#auth-form")
+  .addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const email =
-        document.querySelector("#email").value.trim();
+    // Hide login screen
+    authView.classList.add("hidden");
 
-    const password =
-        passwordInput.value.trim();
-
-
-    if (isSignup) {
-
-        const confirm =
-            confirmPassword.value.trim();
-
-        if (password !== confirm) {
-
-            alert("Passwords do not match.");
-
-            return;
-        }
-
-        console.log("Signup:", email);
-
-    } else {
-
-        console.log("Login:", email);
-
-    }
+    // Open timer
+    showView("timer");
+  });
 
 
-    // Temporary:
-    // after successful authentication,
-    // show the timer.
+// Login / Sign up tabs
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
 
-    document.querySelector(".auth-page")
-        .classList.add("hidden");
+    // Remove active state from all tabs
+    document.querySelectorAll(".tab").forEach((item) => {
+      item.classList.remove("active");
+    });
 
-    timerPage.classList.remove("hidden");
+    // Activate clicked tab
+    tab.classList.add("active");
 
+    // Change button text
+    document.querySelector("#auth-form .primary").textContent =
+      tab.dataset.mode === "login"
+        ? "Log In"
+        : "Create account";
+  });
 });
 
 
-// DURATION SELECTION
+// ==================== NAVIGATION ====================
 
-durationButtons.forEach((button) => {
+document.querySelectorAll("[data-view]").forEach((button) => {
+  button.addEventListener("click", () => {
+    showView(button.dataset.view);
+  });
+});
+
+
+// ==================== TIMER DURATION ====================
+
+document
+  .querySelectorAll(".durations button")
+  .forEach((button) => {
 
     button.addEventListener("click", () => {
 
-        durationButtons.forEach((btn) => {
-            btn.classList.remove("active");
+      // Don't allow duration changes while timer is running
+      if (running) return;
+
+      // Get selected duration
+      selectedMinutes = Number(button.dataset.minutes);
+
+      // Convert minutes to seconds
+      totalSeconds = selectedMinutes * 60;
+
+      // Reset countdown
+      remaining = totalSeconds;
+
+      // Update selected button
+      document
+        .querySelectorAll(".durations button")
+        .forEach((item) => {
+
+          item.classList.toggle(
+            "selected",
+            item === button
+          );
         });
 
-        button.classList.add("active");
-
-        selectedMinutes =
-            Number(button.dataset.minutes);
-
-        customMinutesInput.value = "";
-
+      // Update timer display
+      updateTimer();
     });
+  });
 
-});
 
+// ==================== START / PAUSE TIMER ====================
 
-// CUSTOM DURATION
+document
+  .querySelector("#start-timer")
+  .addEventListener("click", () => {
 
-customMinutesInput.addEventListener("input", () => {
+    // If timer is already running, pause it
+    if (running) {
+      clearInterval(timerId);
 
-    const customValue =
-        Number(customMinutesInput.value);
+      running = false;
 
-    if (customValue > 0) {
+      document.querySelector("#start-timer").textContent =
+        "▶";
 
-        durationButtons.forEach((button) => {
-            button.classList.remove("active");
-        });
-
-        selectedMinutes = customValue;
+      return;
     }
 
-});
+    // Start timer
+    running = true;
+
+    // Change button to pause symbol
+    document.querySelector("#start-timer").textContent =
+      "Ⅱ";
+
+    // Countdown every second
+    timerId = setInterval(() => {
+
+      remaining--;
+
+      updateTimer();
+
+      // Finish session when countdown reaches zero
+      if (remaining <= 0) {
+        finishSession();
+      }
+
+    }, 1000);
+  });
 
 
-// START TIMER
+// ==================== RESET TIMER ====================
 
-startTimerButton.addEventListener("click", () => {
+document
+  .querySelector("#reset-timer")
+  .addEventListener("click", () => {
 
-    if (selectedMinutes < 1) {
-        return;
-    }
+    // Stop timer
+    clearInterval(timerId);
 
-    totalSeconds =
-        selectedMinutes * 60;
+    running = false;
 
-    remainingSeconds =
-        totalSeconds;
+    // Reset to selected duration
+    remaining = totalSeconds;
 
-    isPaused = false;
+    // Update display
+    updateTimer();
 
-    pauseButton.textContent =
-        "Pause";
-
-    document.querySelector(".timer-card")
-        .classList.add("hidden");
-
-    countdownCard.classList.remove("hidden");
-
-    updateCountdown();
-
-    startCountdown();
-
-});
+    // Restore play button
+    document.querySelector("#start-timer").textContent =
+      "▶";
+  });
 
 
-// START COUNTDOWN
+// ==================== STOP TIMER ====================
 
-function startCountdown() {
+document
+  .querySelector("#stop-timer")
+  .addEventListener("click", () => {
 
-    clearInterval(timerInterval);
+    // Stop timer
+    clearInterval(timerId);
 
-    timerInterval =
-        setInterval(() => {
+    running = false;
 
-            if (isPaused) {
-                return;
-            }
+    // Reset to selected duration
+    remaining = totalSeconds;
 
-            remainingSeconds--;
+    // Update display
+    updateTimer();
 
-            updateCountdown();
+    // Restore play button
+    document.querySelector("#start-timer").textContent =
+      "▶";
+  });
 
-            if (remainingSeconds <= 0) {
 
-                clearInterval(timerInterval);
+// ==================== HOUSE ====================
 
-                completeSession();
+function updateHouse() {
 
-            }
+  // Update number of cats found
+  document.querySelector("#cats-found").textContent =
+    catsFound;
 
-        }, 1000);
+  // Update number of furniture pieces
+  document.querySelector("#pieces-found").textContent =
+    piecesFound;
 
+  // Update progress bar
+  document.querySelector("#progress-fill").style.width =
+    `${((catsFound + piecesFound) / 24) * 100}%`;
 }
 
 
-// UPDATE COUNTDOWN
+// ==================== CAT INTERACTION ====================
 
-function updateCountdown() {
+document
+  .querySelectorAll(".cat-at-home")
+  .forEach((button) => {
 
-    const minutes =
-        Math.floor(remainingSeconds / 60);
+    button.addEventListener("click", () => {
 
-    const seconds =
-        remainingSeconds % 60;
+      // Get selected cat
+      const cat = cats[button.dataset.cat];
 
-    countdown.textContent =
-        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      // Update modal image
+      document.querySelector("#modal-image").src =
+        cat.image;
 
+      // Update cat name
+      document.querySelector("#modal-name").textContent =
+        button.dataset.cat;
 
-    const progress =
-        (remainingSeconds / totalSeconds) * 100;
+      // Update cat trait
+      document.querySelector("#modal-trait").textContent =
+        `☀  ${cat.trait}`;
 
-    progressBar.style.width =
-        `${progress}%`;
+      // Update cat quote
+      document.querySelector("#modal-quote").textContent =
+        cat.quote;
 
-    updateBreathingText();
-
-}
-
-function updateBreathingText() {
-
-    if (isPaused) {
-        breathingText.textContent = "Paused";
-        return;
-    }
-
-    const cycle = Math.floor(remainingSeconds / 4) % 4;
-
-    const messages = [
-        "Breathe in",
-        "Hold",
-        "Breathe out",
-        "Rest"
-    ];
-
-    breathingText.textContent = messages[cycle];
-}
-
-// PAUSE / RESUME
-
-pauseButton.addEventListener("click", () => {
-
-    isPaused = !isPaused;
-
-    pauseButton.textContent =
-        isPaused ? "Resume" : "Pause";
-
-    breathingText.textContent =
-        isPaused ? "Paused" : "Breathe in";
-
-});
-
-
-// END EARLY
-
-endButton.addEventListener("click", () => {
-
-    const shouldEnd =
-        confirm("End this session early?");
-
-    if (!shouldEnd) {
-        return;
-    }
-
-    clearInterval(timerInterval);
-
-    resetTimer();
-
-});
-
-// SESSION COMPLETE
-
-function completeSession() {
-
-    clearInterval(timerInterval);
-
-    completedSessions++;
-
-    const rewardIndex =
-        (completedSessions - 1) % rewards.length;
-
-    const reward =
-        rewards[rewardIndex];
-
-    showReward(reward);
-
-}
-
-function showReward(reward) {
-
-    document.querySelector("#timer-page")
-        .classList.add("hidden");
-
-    revealPage.classList.remove("hidden");
-
-    rewardImage.textContent =
-        reward.image;
-
-    rewardTitle.textContent =
-        reward.type === "cat"
-            ? `Meet ${reward.name}`
-            : reward.name;
-
-    rewardDescription.textContent =
-        reward.description;
-
-    rewardTag.textContent =
-        reward.tag;
-
-}
-seeHomeButton.addEventListener("click", () => {
-
-    console.log("See my home clicked");
-
-    revealPage.classList.add("hidden");
-    homePage.classList.remove("hidden");
-
-});
-// RESET TIMER
-
-function resetTimer() {
-
-    clearInterval(timerInterval);
-
-    countdownCard.classList.add("hidden");
-
-    document.querySelector(".timer-card")
+      // Show modal
+      document
+        .querySelector("#cat-modal")
         .classList.remove("hidden");
+    });
+  });
 
-    pauseButton.classList.remove("hidden");
 
-    endButton.textContent =
-        "End session early";
+// ==================== SETTINGS ====================
 
-    remainingSeconds =
-        selectedMinutes * 60;
+document
+  .querySelector("#settings-button")
+  .addEventListener("click", () => {
 
-    updateCountdown();
+    document
+      .querySelector("#settings-modal")
+      .classList.remove("hidden");
+  });
 
-}
+
+// Close modals
+document.querySelectorAll("[data-close]").forEach((button) => {
+
+  button.addEventListener("click", () => {
+
+    button
+      .closest(".modal")
+      .classList.add("hidden");
+  });
+});
+
+
+// ==================== RESET DEMO DATA ====================
+
+document
+  .querySelector("#reset-data")
+  .addEventListener("click", () => {
+
+    // Reset house progress
+    catsFound = 0;
+    piecesFound = 0;
+
+    // Update house
+    updateHouse();
+
+    // Close settings
+    document
+      .querySelector("#settings-modal")
+      .classList.add("hidden");
+  });
+
+
+// ==================== LOG OUT ====================
+
+document
+  .querySelector("#logout")
+  .addEventListener("click", () => {
+
+    // Close settings
+    document
+      .querySelector("#settings-modal")
+      .classList.add("hidden");
+
+    // Hide application
+    appView.classList.add("hidden");
+
+    // Show authentication screen
+    authView.classList.remove("hidden");
+  });
+
+
+// ==================== INITIAL STATE ====================
+
+// Set initial timer display
+updateTimer();
+
+// Set initial house progress
+updateHouse();
