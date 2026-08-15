@@ -777,7 +777,252 @@ input {
         opacity: 1;
     }
 }
+/*REWARD REVEAL*/
 
+.reveal-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 50px 20px 50px;
+
+    text-align: center;
+
+    background: var(--background);
+}
+
+.reveal-content {
+    width: min(520px, 100%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Label */
+
+.reveal-label {
+    color: var(--text-soft);
+
+    font-size: 14px;
+
+    margin: 0 0 42px;
+}
+
+
+/* Reward Area */
+
+.reward-area {
+    position: relative;
+
+    width: 300px;
+    height: 270px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+}
+
+
+/* Cat Glow */
+
+.reward-glow {
+    width: 260px;
+    height: 260px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(190, 173, 235, 0.38),
+            rgba(190, 173, 235, 0.16) 45%,
+            rgba(210, 225, 235, 0.08) 65%,
+            transparent 72%
+        );
+
+    animation: reward-appear 1s ease forwards;
+}
+
+
+/*Cat*/
+
+.reward-image {
+    width: 190px;
+    height: 190px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #ddd0f4,
+        #d3e3ed
+    );
+
+    font-size: 90px;
+
+    box-shadow:
+        0 20px 45px rgba(112, 91, 145, 0.15);
+}
+
+
+/* Sparkles */
+
+.sparkle {
+    position: absolute;
+
+    color: #aa91df;
+
+    font-size: 20px;
+
+    animation: sparkle-float 3s ease-in-out infinite;
+}
+
+.sparkle-1 {
+    top: 28px;
+    left: 38px;
+}
+
+.sparkle-2 {
+    top: 45px;
+    right: 35px;
+
+    font-size: 25px;
+}
+
+.sparkle-3 {
+    bottom: 45px;
+    left: 30px;
+
+    font-size: 15px;
+}
+
+.sparkle-4 {
+    bottom: 65px;
+    right: 25px;
+
+    font-size: 16px;
+}
+
+
+/* Title*/
+
+.reveal-content h1 {
+    margin: 0;
+
+    font-family: "Manrope", sans-serif;
+
+    font-size: 36px;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.04em;
+
+    color: var(--text-dark);
+}
+
+
+/* Description*/
+
+.reward-description {
+    max-width: 340px;
+
+    margin: 12px auto 0;
+
+    color: var(--text-soft);
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* Reward Badge */
+
+.reward-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    margin-top: 20px;
+
+    padding: 8px 16px;
+
+    border-radius: var(--radius-pill);
+
+    background: #eee5fb;
+
+    color: #8067b8;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.reward-tag span {
+    font-size: 14px;
+}
+
+
+/*See Home Button*/
+
+.reveal-button {
+    width: min(450px, 100%);
+
+    margin-top: 36px;
+
+    min-height: 58px;
+
+    border-radius: 30px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+
+/* ---Animations ----*/
+
+@keyframes reward-appear {
+
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes sparkle-float {
+
+    0%,
+    100% {
+        opacity: 0.45;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-6px);
+    }
+}
 
 /*MOBILE*/
 
@@ -834,5 +1079,42 @@ input {
 
     .countdown {
         font-size: 40px;
+    }
+
+    .reveal-page {
+        padding: 35px 20px;
+    }
+
+    .reveal-label {
+        margin-bottom: 30px;
+    }
+
+    .reward-area {
+        width: 260px;
+        height: 240px;
+    }
+
+    .reward-glow {
+        width: 230px;
+        height: 230px;
+    }
+
+    .reward-image {
+        width: 165px;
+        height: 165px;
+
+        font-size: 75px;
+    }
+
+    .reveal-content h1 {
+        font-size: 30px;
+    }
+
+    .reward-description {
+        font-size: 14px;
+    }
+
+    .reveal-button {
+        width: 100%;
     }
 }

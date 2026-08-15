@@ -59,6 +59,24 @@ const progressBar =
 const breathingText =
     document.querySelector("#breathing-text");
 
+const revealPage =
+    document.querySelector("#reveal-page");
+
+const rewardImage =
+    document.querySelector("#reward-image");
+
+const rewardTitle =
+    document.querySelector("#reward-title");
+
+const rewardDescription =
+    document.querySelector("#reward-description");
+
+const rewardTag =
+    document.querySelector("#reward-tag");
+
+const seeHomeButton =
+    document.querySelector("#see-home");
+     
 
 // AUTH STATE
 
@@ -77,6 +95,41 @@ let timerInterval = null;
 
 let isPaused = false;
 
+let completedSessions = 0;
+
+const rewards = [
+    {
+        type: "cat",
+        name: "Mochi",
+        image: "🐱",
+        description: "A gentle little soul has joined your home.",
+        tag: "New Cat"
+    },
+
+    {
+        type: "item",
+        name: "Cozy Rug",
+        image: "🧶",
+        description: "A soft little rug to make your home warmer.",
+        tag: "House Item"
+    },
+
+    {
+        type: "cat",
+        name: "Biscuit",
+        image: "🐈",
+        description: "Biscuit loves quiet corners and warm naps.",
+        tag: "New Cat"
+    },
+
+    {
+        type: "item",
+        name: "Little Plant",
+        image: "🪴",
+        description: "A tiny plant to bring some life into your home.",
+        tag: "House Item"
+    }
+];
 
 // SHOW / HIDE PASSWORD
 
@@ -373,16 +426,41 @@ endButton.addEventListener("click", () => {
 // SESSION COMPLETE
 
 function completeSession() {
-clearInterval(timerInterval);
 
-    breathingText.textContent = "Session complete";
+    clearInterval(timerInterval);
 
-    document.querySelector("#quiet-message").textContent =
-        "You made some space for yourself.";
+    completedSessions++;
 
-    pauseButton.classList.add("hidden");
+    const rewardIndex =
+        (completedSessions - 1) % rewards.length;
 
-    endButton.textContent = "Continue";
+    const reward =
+        rewards[rewardIndex];
+
+    showReward(reward);
+
+}
+
+function showReward(reward) {
+
+    document.querySelector("#timer-page")
+        .classList.add("hidden");
+
+    revealPage.classList.remove("hidden");
+
+    rewardImage.textContent =
+        reward.image;
+
+    rewardTitle.textContent =
+        reward.type === "cat"
+            ? `Meet ${reward.name}`
+            : reward.name;
+
+    rewardDescription.textContent =
+        reward.description;
+
+    rewardTag.textContent =
+        reward.tag;
 
 }
 
