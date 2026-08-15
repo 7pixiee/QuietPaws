@@ -27,6 +27,10 @@ const switchAuth =
     document.querySelector("#switch-auth");
 
 
+const homePage =
+    document.querySelector("#home-page");
+
+
 // TIMER ELEMENTS
 
 const timerPage =
@@ -76,7 +80,7 @@ const rewardTag =
 
 const seeHomeButton =
     document.querySelector("#see-home");
-     
+
 
 // AUTH STATE
 
@@ -368,7 +372,7 @@ function updateCountdown() {
     progressBar.style.width =
         `${progress}%`;
 
-        updateBreathingText();
+    updateBreathingText();
 
 }
 
@@ -463,7 +467,14 @@ function showReward(reward) {
         reward.tag;
 
 }
+seeHomeButton.addEventListener("click", () => {
 
+    console.log("See my home clicked");
+
+    revealPage.classList.add("hidden");
+    homePage.classList.remove("hidden");
+
+});
 // RESET TIMER
 
 function resetTimer() {
