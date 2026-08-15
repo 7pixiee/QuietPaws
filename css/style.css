@@ -55,9 +55,7 @@ input {
     outline: none;
 }
 
-/* =========================
-   AUTH PAGE
-========================= */
+/*AUTH PAGE*/
 
 .auth-page {
     min-height: 100vh;
@@ -73,9 +71,7 @@ input {
     padding: 40px 20px;
 }
 
-/* =========================
-   LOGIN CARD
-========================= */
+/*LOGIN CARD*/
 
 .auth-card {
     width: min(430px, 100%);
@@ -94,9 +90,7 @@ input {
     z-index: 2;
 }
 
-/* =========================
-   BRAND
-========================= */
+/*BRAND*/
 
 .brand {
     text-align: center;
@@ -137,9 +131,7 @@ input {
     font-size: 14px;
 }
 
-/* =========================
-   HEADING
-========================= */
+/*HEADING*/
 
 .auth-heading {
     margin-bottom: 26px;
@@ -161,9 +153,7 @@ input {
     font-size: 14px;
 }
 
-/* =========================
-   INPUTS
-========================= */
+/*INPUTS*/
 
 .input-group {
     margin-bottom: 18px;
@@ -209,9 +199,7 @@ input {
     box-shadow: 0 0 0 4px rgba(139, 120, 197, 0.1);
 }
 
-/* =========================
-   PASSWORD
-========================= */
+/*PASSWORD*/
 
 .password-wrapper {
     position: relative;
@@ -238,9 +226,7 @@ input {
     font-weight: 600;
 }
 
-/* =========================
-   PRIMARY BUTTON
-========================= */
+/*PRIMARY BUTTON*/
 
 .primary-button {
     width: 100%;
@@ -270,9 +256,7 @@ input {
     transform: translateY(0);
 }
 
-/* =========================
-   SIGNUP LINK
-========================= */
+/*SIGNUP LINK*/
 
 .auth-switch {
     margin-top: 24px;
@@ -292,9 +276,7 @@ input {
     font-weight: 600;
 }
 
-/* =========================
-   DECORATIONS
-========================= */
+/*DECORATIONS*/
 
 .auth-decoration {
     position: absolute;
@@ -400,9 +382,11 @@ input {
     bottom: 28%;
 }
 
-/* =========================
-   MOBILE
-========================= */
+.hidden {
+    display: none;
+}
+
+/*MOBILE*/
 
 @media (max-width: 600px) {
 
