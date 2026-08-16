@@ -59,12 +59,12 @@ if (countRow.count === 0) {
   `);
 
   const cats = [
-    ['cat', 'Mochi', 'Naps in sunbeams, ignores everyone', '/assets/cats/mochi.png', 1],
-    ['cat', 'Biscuit', 'Judges your life choices silently', '/assets/cats/biscuit.png', 2],
-    ['cat', 'Luna', 'Watches the night sky with curiosity', '/assets/cats/luna.png', 3],
-    ['cat', 'Oliver', 'Always ready for a gentle purr', '/assets/cats/oliver.png', 4],
-    ['cat', 'Cleo', 'Sits like royalty on cozy cushions', '/assets/cats/cleo.png', 5],
-    ['cat', 'Simba', 'Brave little explorer of quiet corners', '/assets/cats/simba.png', 6],
+    ['cat', 'Mochi', 'Naps in sunbeams, ignores everyone', '/assets/cats/mochi.jpeg', 1],
+    ['cat', 'Biscuit', 'Judges your life choices silently', '/assets/cats/biscuit.jpeg', 2],
+    ['cat', 'Luna', 'Watches the night sky with curiosity', '/assets/cats/luna.jpeg', 3],
+    ['cat', 'Oliver', 'Always ready for a gentle purr', '/assets/cats/oliver.jpeg', 4],
+    ['cat', 'Cleo', 'Sits like royalty on cozy cushions', '/assets/cats/cleo.jpeg', 5],
+    ['cat', 'Simba', 'Brave little explorer of quiet corners', '/assets/cats/simba.jpeg', 6],
     ['cat', 'Peanut', 'Small, playful, and loves cardboards', '/assets/cats/peanut.png', 7],
     ['cat', 'Whiskers', 'Master of peaceful cat naps', '/assets/cats/whiskers.png', 8],
     ['cat', 'Jasper', 'Quietly observes the room from above', '/assets/cats/jasper.png', 9],

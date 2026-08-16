@@ -372,31 +372,29 @@ function showReward(reward, minutes) {
 }
 
 // ==================== IMAGE URL ====================
-
 function getAssetUrl(imageUrl) {
   if (!imageUrl) {
     return "";
   }
 
-  // Already a complete URL
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+  // If the backend ever gives us a complete URL,
+  // use it directly.
+  if (
+    imageUrl.startsWith("http://") ||
+    imageUrl.startsWith("https://")
+  ) {
     return imageUrl;
   }
 
-  // Backend server origin
-  const backendOrigin = API_BASE.replace(/\/api\/?$/, "");
+  // Backend returns paths such as:
+  // /assets/cats/mochi.jpeg
+  //
+  // Remove the leading "/" so the browser resolves
+  // the path relative to the QuietPaws frontend folder.
+  const cleanPath = imageUrl.replace(/^\/+/, "");
 
-  // Backend returned something like:
-  // /assets/cats/luna.png
-  if (imageUrl.startsWith("/")) {
-    return `${backendOrigin}${imageUrl}`;
-  }
-
-  // Backend returned:
-  // assets/cats/luna.png
-  return `${backendOrigin}/${imageUrl}`;
+  return new URL(cleanPath, document.baseURI).href;
 }
-
 // ==================== STREAK ====================
 
 function updateStreak(streak) {
