@@ -12,19 +12,19 @@ const navLinks = document.querySelectorAll(".nav-link");
 
 const cats = {
   Luna: {
-    image: "assets/cat3.jpeg",
+    image: "assets/cats/cat3.jpeg",
     trait: "Naps in sunbeams, ignores everyone",
     quote: "“The sun is the best blanket.”",
   },
 
   Mochi: {
-    image: "assets/cat1.jpeg",
+    image: "assets/cats/cat1.jpeg",
     trait: "Collects quiet moments by the window",
     quote: "“Slow is a lovely speed.”",
   },
 
   Poppy: {
-    image: "assets/cat2.jpeg",
+    image: "assets/cats/cat2.jpeg",
     trait: "Always finds the warmest spot",
     quote: "“There is time for one more rest.”",
   },
