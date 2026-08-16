@@ -1,6 +1,9 @@
 // ==================== CONFIG ====================
 
-const API_BASE = "https://quietpaws-backend.vercel.app/api";
+const IS_LOCAL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const API_BASE = IS_LOCAL
+  ? "http://localhost:5000/api"
+  : "https://quietpaws-backend.vercel.app/api";
 
 // ==================== APP ELEMENTS ====================
 
