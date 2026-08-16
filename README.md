@@ -2,23 +2,23 @@
 
 ## 1. Project Overview
 
-• QuietPaw is an web app that helps in calming the nervous system of an user that is overwhelmed and is constantly overthinking.
-• It uses an simple timer (sound-free) to track time the user is meditating.
-• The streak and the reward system helps the user in building an consistent habit that improves there mental health.
+1. QuietPaw is an web app that helps in calming the nervous system of an user that is overwhelmed and is constantly overthinking.
+2. It uses an simple timer (sound-free) to track time the user is meditating.
+3. The streak and the reward system helps the user in building an consistent habit that improves there mental health.
 
 ## 2. Features
 
-• Adjustable timer with 3/5/10 minutes presets.
-• Reward system after each session the user collects the reward alternating between cats and room furniture pieces.
-• A single illustrated house view that fills in visually as items are unlocked.
-• Login/sign up so each persons progress is saved
+1. Adjustable timer with 3/5/10 minutes presets.
+2. Reward system after each session the user collects the reward alternating between cats and room furniture pieces.
+3. A single illustrated house view that fills in visually as items are unlocked.
+4. Login/sign up so each persons progress is saved
 
 ## 3. Tech Stack
 
-• **Frontend:** HTML, CSS, JS
-• **Backend:** Node.js, Express
-• **Database:** SQLite
-• **UI/UX Design & Illustration:** Figma
+**Frontend:** HTML, CSS, JS
+**Backend:** Node.js, Express
+**Database:** SQLite
+**UI/UX Design & Illustration:** Figma
 
 ## 4. Architecture
 
@@ -126,7 +126,7 @@ POST | /sessions/complete| Bearer JWT | Record completed session + streak + rewa
 
 ## 10. Contributors
 
-• **Name** : • contribution • contribution
-• **Name** : contribution • contribution
-• **Name** : contribution • contribution
-• **Name** : contribution • contribution
+1. **Name** : • contribution • contribution
+2. **Name** : contribution • contribution
+3. **Name** : contribution • contribution
+4. **Name** : contribution • contribution
