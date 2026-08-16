@@ -117,7 +117,7 @@ The app runs at `http://localhost:5000` by default.
 
 ![alt text](/frontend/assets/House.jpg)
 
-![alt text](/frontend/assets/Timer.jpg)
+![alt text](/frontend/assets/timer.jpg)
 
 ## 9. API Documentation
 
