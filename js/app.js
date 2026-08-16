@@ -434,16 +434,14 @@ document.querySelectorAll(".durations button").forEach((button) => {
 });
 
 // ==================== START / PAUSE TIMER ====================
-
 document.querySelector("#start-timer").addEventListener("click", () => {
   if (running) {
     clearInterval(timerId);
-
     timerId = null;
     running = false;
-
     document.querySelector("#start-timer").textContent = "▶";
-
+    document.querySelector("#timer-setup").classList.remove("hidden");
+    document.querySelector("#time-display").classList.add("hidden");
     return;
   }
 
@@ -453,19 +451,49 @@ document.querySelector("#start-timer").addEventListener("click", () => {
   }
 
   running = true;
-
   document.querySelector("#start-timer").textContent = "Ⅱ";
+  document.querySelector("#timer-setup").classList.add("hidden");
+  document.querySelector("#time-display").classList.remove("hidden");
 
   timerId = setInterval(() => {
     remaining--;
-
     updateTimer();
-
     if (remaining <= 0) {
       finishSession();
     }
   }, 1000);
 });
+// document.querySelector("#start-timer").addEventListener("click", () => {
+//   if (running) {
+//     clearInterval(timerId);
+
+//     timerId = null;
+//     running = false;
+
+//     document.querySelector("#start-timer").textContent = "▶";
+
+//     return;
+//   }
+
+//   if (remaining <= 0) {
+//     remaining = totalSeconds;
+//     updateTimer();
+//   }
+
+//   running = true;
+
+//   document.querySelector("#start-timer").textContent = "Ⅱ";
+
+//   timerId = setInterval(() => {
+//     remaining--;
+
+//     updateTimer();
+
+//     if (remaining <= 0) {
+//       finishSession();
+//     }
+//   }, 1000);
+// });
 
 // ==================== RESET TIMER ====================
 
@@ -480,6 +508,8 @@ document.querySelector("#reset-timer").addEventListener("click", () => {
   updateTimer();
 
   document.querySelector("#start-timer").textContent = "▶";
+  document.querySelector("#timer-setup").classList.remove("hidden");
+  document.querySelector("#time-display").classList.add("hidden");
 });
 
 // ==================== STOP TIMER ====================
@@ -495,6 +525,8 @@ document.querySelector("#stop-timer").addEventListener("click", () => {
   updateTimer();
 
   document.querySelector("#start-timer").textContent = "▶";
+  document.querySelector("#timer-setup").classList.remove("hidden");
+  document.querySelector("#time-display").classList.add("hidden");
 });
 
 // ==================== HOUSE / REWARDS ====================
@@ -648,6 +680,10 @@ function openCatModal(cat) {
 
   modal.classList.remove("hidden");
 }
+
+document.querySelector("#close-reveal").addEventListener("click", () => {
+  showView("timer");
+});
 
 // ==================== PROFILE ====================
 
