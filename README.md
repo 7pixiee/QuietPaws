@@ -115,6 +115,10 @@ The app runs at `http://localhost:5000` by default.
 
 ## 8. Screenshots / Demo
 
+![alt text](/assets/House.jpg)
+
+![alt text](/assets/Timer.jpg)
+
 ## 9. API Documentation
 
 Method | Endpoint | Auth Required | Purpose & Description
@@ -123,10 +127,3 @@ POST | /auth/login | Public (No) | Authenticate user & receive JWT Bearer token
 GET | /user/profile | Bearer JWT | Fetch user profile, current/best streak & total sessions
 GET | /user/rewards | Bearer JWT | Fetch full rewards catalog (12 cats + 12 pieces)
 POST | /sessions/complete| Bearer JWT | Record completed session + streak + reward
-
-## 10. Contributors
-
-1. **Name** : • contribution • contribution
-2. **Name** : contribution • contribution
-3. **Name** : contribution • contribution
-4. **Name** : contribution • contribution
