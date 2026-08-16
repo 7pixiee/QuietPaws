@@ -603,52 +603,42 @@ function updateHouseCounts(cats, pieces) {
 }
 
 // ==================== CREATE CAT ====================
-
 function createCatElement(cat) {
   const button = document.createElement("button");
-
   button.className = "cat-at-home";
-
   button.dataset.catId = cat.id;
-
   button.dataset.catName = cat.name;
-
   button.type = "button";
 
   const image = document.createElement("img");
-
   image.src = getAssetUrl(cat.image_url);
-
   image.alt = cat.name || "Cat";
-
   button.appendChild(image);
 
-  button.addEventListener("click", () => {
-    openCatModal(cat);
-  });
+  button.addEventListener("click", () => openCatModal(cat));
+
+  requestAnimationFrame(() => button.classList.add("unlocked"));
+  image.onerror = () => {
+    image.style.display = "none";
+  };
 
   return button;
 }
-
 // ==================== CREATE FURNITURE ====================
 
 function createFurnitureElement(piece) {
   const element = document.createElement("div");
-
-  element.className = "furniture-at-home";
+  element.className = "house-piece";
 
   const image = document.createElement("img");
-
   image.src = getAssetUrl(piece.image_url);
-
   image.alt = piece.name || "Furniture";
-
-  const name = document.createElement("span");
-
-  name.textContent = piece.name || "Furniture";
-
   element.appendChild(image);
-  element.appendChild(name);
+
+  requestAnimationFrame(() => element.classList.add("unlocked"));
+  image.onerror = () => {
+    image.style.display = "none";
+  };
 
   return element;
 }
@@ -681,6 +671,18 @@ function openCatModal(cat) {
 
 document.querySelector("#close-reveal").addEventListener("click", () => {
   showView("timer");
+});
+
+// ==================== ROOM SWITCHER ====================
+
+document.querySelectorAll(".room-tile.locked").forEach((tile) => {
+  tile.addEventListener("click", () => {
+    document.querySelector("#coming-soon-modal").classList.remove("hidden");
+  });
+});
+
+document.querySelector(".room-tile.active")?.addEventListener("click", () => {
+  // Already on the unlocked room — no-op, but keeps the tile interactive-feeling.
 });
 
 // ==================== PROFILE ====================

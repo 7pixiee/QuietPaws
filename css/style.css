@@ -490,10 +490,211 @@ nav {
 }
 
 /* ==================== HOUSE ==================== */
+.room {
+  width: min(880px, 90vw);
+  height: 480px;
+  margin: auto;
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #f3f8f5;
+  box-shadow: 0 20px 40px #76968c18;
+  border: 1px solid #d5e9dd;
+}
 
+.room-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* fits Room.png fully, no stretch, no overflow */
+  display: block;
+}
+/* 
+ */
+
+/* .room-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+} */
+
+.house-collectibles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.house-collectibles .cat-at-home,
+.house-collectibles .house-piece {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden; /* clip broken-image alt text instead of letting it spill */
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  pointer-events: none;
+}
+
+.house-collectibles .cat-at-home img,
+.house-collectibles .house-piece img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  color: transparent; /* hides alt text if the image 404s */
+}
+
+.house-collectibles .cat-at-home.unlocked,
+.house-collectibles .house-piece.unlocked {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto; /* clickable once visible — see note below */
+}
+
+.room-switcher {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  margin: 0 auto 8px;
+  max-width: min(880px, 90vw);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.room-switcher::-webkit-scrollbar {
+  height: 6px;
+}
+
+.room-switcher::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+.room-tile {
+  position: relative;
+  flex: 0 0 auto;
+  width: 108px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #e3ece7;
+  background: #eef6f1;
+  transition:
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.room-tile:hover {
+  transform: translateY(-2px);
+}
+
+.room-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.room-tile.active {
+  border-color: var(--ink);
+  box-shadow: 0 6px 14px #2d6d6425;
+}
+
+.room-tile.locked img {
+  filter: grayscale(45%) brightness(0.92); /* a bit more muted than last pass (25%/0.97) */
+  opacity: 0.45; /* was 0.85 — pull back slightly so it reads as locked at a glance */
+}
+
+.room-tile.locked:hover {
+  transform: none;
+}
+.room-tile > span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 6px 5px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(to top, #23484095, transparent);
+  z-index: 3;
+}
+
+.room-tile.active > span {
+  background: linear-gradient(to top, #2d6d64c0, transparent);
+}
+.room-tile .lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+
+.room-tile .lock .icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px #23484045;
+}
+.room-tile .lock::before {
+  content: none; /* remove the old halo trick entirely — it was breaking the stacking context and hiding the icon */
+}
+
+.modal-card.coming-soon {
+  background: #fff; /* override the portrait-gradient background entirely */
+  padding-top: 40px;
+}
+
+.coming-soon-icon {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--soft);
+  border: 2px solid var(--line);
+  font-size: 2rem;
+}
+
+.modal-card.coming-soon h2 {
+  font-size: 1.7rem;
+  margin-bottom: 4px;
+}
+
+.modal-card.coming-soon .trait {
+  border: none;
+  background: var(--soft);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 18px 20px;
+  margin: 20px auto 30px;
+}
+/* ==================== HOUSE ==================== */
 .house-heading {
   text-align: center;
-  padding: 48px 20px 35px;
+  padding: 20px 20px 35px;
 }
 
 .house-heading h2 {
@@ -523,7 +724,7 @@ nav {
   background: #70ada5;
   border-radius: 8px;
 }
-
+/* 
 .room {
   width: min(880px, 90vw);
   height: 450px;
@@ -548,9 +749,9 @@ nav {
   );
   opacity: 0.35;
   top: 63%;
-}
+} */
 
-.window {
+/* .window {
   position: absolute;
   width: 260px;
   height: 190px;
@@ -690,9 +891,9 @@ nav {
   bottom: 138px;
   width: 100px;
   height: 125px;
-}
+} */
 
-.house-collectibles {
+/* .house-collectibles {
   position: absolute;
   inset: 0;
   z-index: 4;
@@ -783,7 +984,7 @@ nav {
   border-radius: 50%;
   font-size: 1.8rem;
   z-index: 4;
-}
+} */
 
 /* ==================== PROFILE ==================== */
 
@@ -1096,6 +1297,10 @@ nav {
     height: 380px;
     transform: scale(0.98);
     transform-origin: top;
+  }
+
+  .room-tile {
+    width: 96px;
   }
 
   .window {
