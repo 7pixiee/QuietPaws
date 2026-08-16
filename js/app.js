@@ -476,37 +476,6 @@ document.querySelector("#start-timer").addEventListener("click", () => {
     }
   }, 1000);
 });
-// document.querySelector("#start-timer").addEventListener("click", () => {
-//   if (running) {
-//     clearInterval(timerId);
-
-//     timerId = null;
-//     running = false;
-
-//     document.querySelector("#start-timer").textContent = "▶";
-
-//     return;
-//   }
-
-//   if (remaining <= 0) {
-//     remaining = totalSeconds;
-//     updateTimer();
-//   }
-
-//   running = true;
-
-//   document.querySelector("#start-timer").textContent = "Ⅱ";
-
-//   timerId = setInterval(() => {
-//     remaining--;
-
-//     updateTimer();
-
-//     if (remaining <= 0) {
-//       finishSession();
-//     }
-//   }, 1000);
-// });
 
 // ==================== RESET TIMER ====================
 
@@ -872,3 +841,5 @@ if (token) {
     handleLogout();
   });
 }
+
+
