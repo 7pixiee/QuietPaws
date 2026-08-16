@@ -912,11 +912,23 @@ nav {
 }
 
 .reveal-card img {
+  display: block;
+  margin: 0 auto;
   height: 200px;
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
   filter: drop-shadow(0 10px 15px #627f7625);
+}
+
+.reveal-card .reward-type {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #5d756d;
+  margin: 14px auto 4px;
+  text-align: center;
+  letter-spacing: 0.5px;
 }
 
 .reveal-card h3 {
