@@ -1,35 +1,40 @@
+// ==================== CONFIG ====================
+
+const API_BASE = "http://localhost:5000/api";
+
 // ==================== APP ELEMENTS ====================
 
 const appView = document.querySelector("#app-view");
 const authView = document.querySelector("#auth-view");
 const revealView = document.querySelector("#reveal-view");
+const revealObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.attributeName === "class") {
+      console.log("revealView class changed to:", revealView.className);
+      console.trace("Called from:");
+    }
+  });
+});
+
+revealObserver.observe(revealView, { attributes: true });
 
 const pages = document.querySelectorAll(".page");
 const navLinks = document.querySelectorAll(".nav-link");
 
+const authForm = document.querySelector("#auth-form");
+const authError = document.querySelector("#auth-error");
 
-// ==================== CAT DATA ====================
+const emailInput = document.querySelector("#email");
+const passwordInput = document.querySelector("#password");
+const nameInput = document.querySelector("#name");
 
-const cats = {
-  Luna: {
-    image: "assets/cats/cat3.jpeg",
-    trait: "Naps in sunbeams, ignores everyone",
-    quote: "“The sun is the best blanket.”",
-  },
+const authSubmit = document.querySelector("#auth-submit");
 
-  Mochi: {
-    image: "assets/cats/cat1.jpeg",
-    trait: "Collects quiet moments by the window",
-    quote: "“Slow is a lovely speed.”",
-  },
+// ==================== AUTH STATE ====================
 
-  Poppy: {
-    image: "assets/cats/cat2.jpeg",
-    trait: "Always finds the warmest spot",
-    quote: "“There is time for one more rest.”",
-  },
-};
-
+let authMode = "login";
+let token = localStorage.getItem("quietpaws_token");
+let currentUser = null;
 
 // ==================== TIMER STATE ====================
 
@@ -37,50 +42,228 @@ let selectedMinutes = 5;
 let totalSeconds = 300;
 let remaining = 300;
 
-let timerId;
+let timerId = null;
 let running = false;
-
-
-// ==================== HOUSE STATE ====================
-
-let catsFound = 3;
-let piecesFound = 2;
-let nextReward = "cat";
-
 
 // ==================== VIEW MANAGEMENT ====================
 
 function showView(name) {
-  // Hide the reward screen
   revealView.classList.add("hidden");
-
-  // Show the main application
   appView.classList.remove("hidden");
 
-  // Hide all pages
   pages.forEach((page) => {
     page.classList.add("hidden");
   });
 
-  // Show the selected page
-  document
-    .querySelector(`#${name}-view`)
-    .classList.remove("hidden");
+  const targetView = document.querySelector(`#${name}-view`);
 
-  // Update active navigation link
+  if (!targetView) {
+    console.error(`View not found: ${name}-view`);
+    return;
+  }
+
+  targetView.classList.remove("hidden");
+
   navLinks.forEach((link) => {
-    link.classList.toggle(
-      "active",
-      link.dataset.view === name
-    );
+    link.classList.toggle("active", link.dataset.view === name);
   });
 
-  // Update house information whenever House is opened
   if (name === "house") {
-    updateHouse();
+    loadRewards();
+  }
+
+  if (name === "profile") {
+    loadProfile();
   }
 }
 
+// ==================== API HELPER ====================
+
+async function apiRequest(endpoint, options = {}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+      ...options,
+      headers,
+    });
+
+    let data = {};
+
+    try {
+      data = await response.json();
+    } catch {
+      data = {};
+    }
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        handleLogout();
+      }
+
+      throw new Error(data.error || "Something went wrong. Please try again.");
+    }
+
+    return data;
+  } catch (error) {
+    if (error.name === "TypeError") {
+      throw new Error(
+        "Unable to connect to the server. Please make sure the backend is running.",
+      );
+    }
+
+    throw error;
+  }
+}
+
+// ==================== AUTH STORAGE ====================
+
+function saveAuth(data) {
+  token = data.token;
+  currentUser = data.user;
+
+  localStorage.setItem("quietpaws_token", token);
+
+  if (currentUser) {
+    localStorage.setItem("quietpaws_user", JSON.stringify(currentUser));
+  }
+}
+
+function clearAuth() {
+  token = null;
+  currentUser = null;
+
+  localStorage.removeItem("quietpaws_token");
+  localStorage.removeItem("quietpaws_user");
+}
+
+function loadSavedUser() {
+  const savedUser = localStorage.getItem("quietpaws_user");
+
+  if (!savedUser) {
+    return;
+  }
+
+  try {
+    currentUser = JSON.parse(savedUser);
+  } catch {
+    currentUser = null;
+  }
+}
+
+// ==================== AUTH MODE ====================
+
+function setAuthMode(mode) {
+  authMode = mode;
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.mode === mode);
+  });
+
+  if (nameInput) {
+    nameInput.closest("label")?.classList.toggle("hidden", mode !== "signup");
+
+    nameInput.required = mode === "signup";
+  }
+
+  if (authSubmit) {
+    authSubmit.textContent = mode === "login" ? "Log In" : "Create account";
+  }
+
+  if (authError) {
+    authError.textContent = "";
+  }
+}
+
+// ==================== AUTHENTICATION ====================
+
+authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  authError.textContent = "";
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    authError.textContent = "Please enter your email and password.";
+    return;
+  }
+
+  if (authMode === "signup" && !nameInput.value.trim()) {
+    authError.textContent = "Please enter your name.";
+    return;
+  }
+
+  authSubmit.disabled = true;
+  authSubmit.textContent =
+    authMode === "login" ? "Logging in..." : "Creating account...";
+
+  try {
+    let data;
+
+    if (authMode === "signup") {
+      data = await apiRequest("/auth/signup", {
+        method: "POST",
+        body: JSON.stringify({
+          name: nameInput.value.trim(),
+          email,
+          password,
+        }),
+      });
+    } else {
+      data = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+    }
+
+    saveAuth(data);
+
+    authForm.reset();
+
+    setAuthMode("login");
+
+    authView.classList.add("hidden");
+    appView.classList.remove("hidden");
+
+    showView("timer");
+
+    await loadProfile();
+  } catch (error) {
+    authError.textContent = error.message;
+  } finally {
+    authSubmit.disabled = false;
+
+    authSubmit.textContent = authMode === "login" ? "Log In" : "Create account";
+  }
+});
+
+// Login / Signup tabs
+
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    setAuthMode(tab.dataset.mode);
+  });
+});
+
+// ==================== NAVIGATION ====================
+
+document.querySelectorAll("[data-view]").forEach((button) => {
+  button.addEventListener("click", () => {
+    showView(button.dataset.view);
+  });
+});
 
 // ==================== TIMER ====================
 
@@ -92,351 +275,569 @@ function formatTime(seconds) {
   return `${minutes}:${secondsLeft}`;
 }
 
-
 function updateTimer() {
   const timeDisplay = document.querySelector("#time-display");
+
   const timerRing = document.querySelector("#timer-ring");
 
-  // Update the countdown text
   timeDisplay.textContent = formatTime(remaining);
 
-  // Update the circular progress
-  timerRing.style.setProperty(
-    "--progress",
-    `${(remaining / totalSeconds) * 100}%`
-  );
+  const progress = totalSeconds > 0 ? (remaining / totalSeconds) * 100 : 100;
+
+  timerRing.style.setProperty("--progress", `${progress}%`);
 }
 
+// ==================== COMPLETE SESSION ====================
 
-function finishSession() {
-  // Stop the timer
+async function finishSession() {
   clearInterval(timerId);
 
+  timerId = null;
   running = false;
 
-  // Decide which cat will be rewarded
-  const reward =
-    catsFound % 3 === 0
-      ? "Poppy"
-      : catsFound % 2 === 0
-        ? "Mochi"
-        : "Luna";
+  const startButton = document.querySelector("#start-timer");
 
-  // Update progress
-  catsFound++;
-  nextReward = "piece";
+  startButton.textContent = "▶";
+  startButton.disabled = true;
 
-  // Update reward screen
-  document.querySelector("#reward-image").src =
-    cats[reward].image;
+  try {
+    const intentionInput = document.querySelector("#break-reason");
 
-  document.querySelector("#reward-name").textContent =
-    reward;
+    const intention = intentionInput?.value.trim() || "";
 
-  document.querySelector("#reward-trait").textContent =
-    cats[reward].trait;
+    const data = await apiRequest("/sessions/complete", {
+      method: "POST",
+      body: JSON.stringify({
+        durationMin: selectedMinutes,
+        intention,
+      }),
+    });
+    console.log("Reveal shown at", new Date().toISOString());
 
-  document.querySelector("#reward-minutes").textContent =
-    selectedMinutes;
+    showReward(data.reward, selectedMinutes);
 
-  // Switch from app to reward screen
-  appView.classList.add("hidden");
-  revealView.classList.remove("hidden");
+    updateStreak(data.newStreak, data.bestStreak);
+  } catch (error) {
+    alert(error.message);
 
-  // Update house progress
-  updateHouse();
+    remaining = totalSeconds;
+    updateTimer();
+  } finally {
+    startButton.disabled = false;
+  }
 }
 
+// ==================== REWARD DISPLAY ====================
 
-// ==================== AUTHENTICATION ====================
+function showReward(reward, minutes) {
+  const rewardTitle = document.querySelector("#reward-title");
 
-document
-  .querySelector("#auth-form")
-  .addEventListener("submit", (event) => {
-    event.preventDefault();
+  const rewardImage = document.querySelector("#reward-image");
 
-    // Hide login screen
-    authView.classList.add("hidden");
+  const rewardName = document.querySelector("#reward-name");
 
-    // Open timer
-    showView("timer");
-  });
+  const rewardTrait = document.querySelector("#reward-trait");
 
+  const rewardMinutes = document.querySelector("#reward-minutes");
 
-// Login / Sign up tabs
-document.querySelectorAll(".tab").forEach((tab) => {
-  tab.addEventListener("click", () => {
+  const rewardType = document.querySelector("#reward-type");
 
-    // Remove active state from all tabs
-    document.querySelectorAll(".tab").forEach((item) => {
-      item.classList.remove("active");
-    });
+  const rewardQuote = document.querySelector("#reward-quote");
 
-    // Activate clicked tab
-    tab.classList.add("active");
+  if (!reward) {
+    rewardTitle.textContent = "Quiet time complete";
 
-    // Change button text
-    document.querySelector("#auth-form .primary").textContent =
-      tab.dataset.mode === "login"
-        ? "Log In"
-        : "Create account";
-  });
-});
+    rewardImage.classList.add("hidden");
 
+    rewardName.textContent = "You did it.";
 
-// ==================== NAVIGATION ====================
+    rewardTrait.textContent = "You gave yourself some peaceful time.";
 
-document.querySelectorAll("[data-view]").forEach((button) => {
-  button.addEventListener("click", () => {
-    showView(button.dataset.view);
-  });
-});
+    rewardType.textContent = "";
 
+    rewardQuote.textContent = "";
+  } else {
+    rewardImage.classList.remove("hidden");
+
+    rewardImage.src = getAssetUrl(reward.image_url);
+
+    rewardImage.alt = reward.name || "QuietPaws reward";
+
+    rewardName.textContent = reward.name || "New reward";
+
+    rewardTrait.textContent = reward.detail || "";
+
+    rewardType.textContent =
+      reward.type === "cat" ? "New cat friend" : "New house item";
+
+    rewardTitle.textContent =
+      reward.type === "cat" ? "A new friend!" : "Your house grew!";
+
+    if (reward.quote) {
+      rewardQuote.textContent = reward.quote;
+      rewardQuote.classList.remove("hidden");
+    } else {
+      rewardQuote.textContent = "";
+      rewardQuote.classList.add("hidden");
+    }
+  }
+
+  rewardMinutes.textContent = minutes;
+
+  appView.classList.add("hidden");
+  revealView.classList.remove("hidden");
+}
+
+// ==================== IMAGE URL ====================
+function getAssetUrl(imageUrl) {
+  if (!imageUrl) {
+    return "";
+  }
+
+  // If the backend ever gives us a complete URL,
+  // use it directly.
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  // Backend returns paths such as:
+  // /assets/cats/mochi.jpeg
+  //
+  // Remove the leading "/" so the browser resolves
+  // the path relative to the QuietPaws frontend folder.
+  const cleanPath = imageUrl.replace(/^\/+/, "");
+
+  return new URL(cleanPath, document.baseURI).href;
+}
+// ==================== STREAK ====================
+
+function updateStreak(current, best) {
+  // <-- replace the old version here
+  const streakCount = document.querySelector("#streak-count");
+  const bestStreakCount = document.querySelector("#best-streak-count");
+  if (streakCount) {
+    const dayText = current === 1 ? "Day" : "Days";
+    streakCount.textContent = `${current} ${dayText} Streak`;
+  }
+  if (bestStreakCount && best !== undefined) {
+    bestStreakCount.textContent = best;
+  }
+}
 
 // ==================== TIMER DURATION ====================
 
-document
-  .querySelectorAll(".durations button")
-  .forEach((button) => {
+document.querySelectorAll(".durations button").forEach((button) => {
+  button.addEventListener("click", () => {
+    if (running) {
+      return;
+    }
 
-    button.addEventListener("click", () => {
+    selectedMinutes = Number(button.dataset.minutes);
 
-      // Don't allow duration changes while timer is running
-      if (running) return;
+    totalSeconds = selectedMinutes * 60;
 
-      // Get selected duration
-      selectedMinutes = Number(button.dataset.minutes);
+    remaining = totalSeconds;
 
-      // Convert minutes to seconds
-      totalSeconds = selectedMinutes * 60;
-
-      // Reset countdown
-      remaining = totalSeconds;
-
-      // Update selected button
-      document
-        .querySelectorAll(".durations button")
-        .forEach((item) => {
-
-          item.classList.toggle(
-            "selected",
-            item === button
-          );
-        });
-
-      // Update timer display
-      updateTimer();
+    document.querySelectorAll(".durations button").forEach((item) => {
+      item.classList.toggle("selected", item === button);
     });
-  });
 
+    updateTimer();
+  });
+});
 
 // ==================== START / PAUSE TIMER ====================
+document.querySelector("#start-timer").addEventListener("click", () => {
+  if (running) {
+    clearInterval(timerId);
+    timerId = null;
+    running = false;
+    document.querySelector("#start-timer").textContent = "▶";
+    document.querySelector("#timer-setup").classList.remove("hidden");
+    document.querySelector("#time-display").classList.add("hidden");
+    return;
+  }
 
-document
-  .querySelector("#start-timer")
-  .addEventListener("click", () => {
+  if (remaining <= 0) {
+    remaining = totalSeconds;
+    updateTimer();
+  }
 
-    // If timer is already running, pause it
-    if (running) {
-      clearInterval(timerId);
+  running = true;
+  document.querySelector("#start-timer").textContent = "Ⅱ";
+  document.querySelector("#timer-setup").classList.add("hidden");
+  document.querySelector("#time-display").classList.remove("hidden");
 
-      running = false;
+  timerId = setInterval(() => {
+    remaining--;
+    updateTimer();
+    if (remaining <= 0) {
+      finishSession();
+    }
+  }, 1000);
+});
 
-      document.querySelector("#start-timer").textContent =
-        "▶";
+// ==================== RESET TIMER ====================
+
+document.querySelector("#reset-timer").addEventListener("click", () => {
+  clearInterval(timerId);
+
+  timerId = null;
+  running = false;
+
+  remaining = totalSeconds;
+
+  updateTimer();
+
+  document.querySelector("#start-timer").textContent = "▶";
+  document.querySelector("#timer-setup").classList.remove("hidden");
+  document.querySelector("#time-display").classList.add("hidden");
+});
+
+// ==================== STOP TIMER ====================
+
+document.querySelector("#stop-timer").addEventListener("click", () => {
+  clearInterval(timerId);
+
+  timerId = null;
+  running = false;
+
+  remaining = totalSeconds;
+
+  updateTimer();
+
+  document.querySelector("#start-timer").textContent = "▶";
+  document.querySelector("#timer-setup").classList.remove("hidden");
+  document.querySelector("#time-display").classList.add("hidden");
+});
+
+// ==================== HOUSE / REWARDS ====================
+
+async function loadRewards() {
+  const collectiblesContainer = document.querySelector("#house-collectibles");
+
+  if (!collectiblesContainer) {
+    return;
+  }
+
+  collectiblesContainer.innerHTML = `<p class="loading">Loading your collection...</p>`;
+
+  try {
+    const data = await apiRequest("/user/rewards");
+
+    const cats = Array.isArray(data.cats) ? data.cats : [];
+
+    const pieces = Array.isArray(data.pieces) ? data.pieces : [];
+
+    updateHouseCounts(cats, pieces);
+
+    collectiblesContainer.innerHTML = "";
+
+    if (cats.length === 0 && pieces.length === 0) {
+      collectiblesContainer.innerHTML = `<p class="empty-collection">
+          Complete a quiet session to unlock your first reward.
+        </p>`;
 
       return;
     }
 
-    // Start timer
-    running = true;
-
-    // Change button to pause symbol
-    document.querySelector("#start-timer").textContent =
-      "Ⅱ";
-
-    // Countdown every second
-    timerId = setInterval(() => {
-
-      remaining--;
-
-      updateTimer();
-
-      // Finish session when countdown reaches zero
-      if (remaining <= 0) {
-        finishSession();
+    cats.forEach((cat) => {
+      if (cat.unlocked === false) {
+        return;
       }
 
-    }, 1000);
-  });
+      const button = createCatElement(cat);
 
+      collectiblesContainer.appendChild(button);
+    });
 
-// ==================== RESET TIMER ====================
+    pieces.forEach((piece) => {
+      if (piece.unlocked === false) {
+        return;
+      }
 
-document
-  .querySelector("#reset-timer")
-  .addEventListener("click", () => {
+      const element = createFurnitureElement(piece);
 
-    // Stop timer
-    clearInterval(timerId);
-
-    running = false;
-
-    // Reset to selected duration
-    remaining = totalSeconds;
-
-    // Update display
-    updateTimer();
-
-    // Restore play button
-    document.querySelector("#start-timer").textContent =
-      "▶";
-  });
-
-
-// ==================== STOP TIMER ====================
-
-document
-  .querySelector("#stop-timer")
-  .addEventListener("click", () => {
-
-    // Stop timer
-    clearInterval(timerId);
-
-    running = false;
-
-    // Reset to selected duration
-    remaining = totalSeconds;
-
-    // Update display
-    updateTimer();
-
-    // Restore play button
-    document.querySelector("#start-timer").textContent =
-      "▶";
-  });
-
-
-// ==================== HOUSE ====================
-
-function updateHouse() {
-
-  // Update number of cats found
-  document.querySelector("#cats-found").textContent =
-    catsFound;
-
-  // Update number of furniture pieces
-  document.querySelector("#pieces-found").textContent =
-    piecesFound;
-
-  // Update progress bar
-  document.querySelector("#progress-fill").style.width =
-    `${((catsFound + piecesFound) / 24) * 100}%`;
+      collectiblesContainer.appendChild(element);
+    });
+  } catch (error) {
+    collectiblesContainer.innerHTML = `<p class="error">
+        ${escapeHtml(error.message)}
+      </p>`;
+  }
 }
 
+function updateHouseCounts(cats, pieces) {
+  const unlockedCats = cats.filter((cat) => cat.unlocked);
+  const unlockedPieces = pieces.filter((piece) => piece.unlocked);
 
-// ==================== CAT INTERACTION ====================
+  const catsFound = document.querySelector("#cats-found");
+  const piecesFound = document.querySelector("#pieces-found");
 
-document
-  .querySelectorAll(".cat-at-home")
-  .forEach((button) => {
+  if (catsFound) catsFound.textContent = unlockedCats.length;
+  if (piecesFound) piecesFound.textContent = unlockedPieces.length;
 
-    button.addEventListener("click", () => {
+  const progressFill = document.querySelector("#progress-fill");
 
-      // Get selected cat
-      const cat = cats[button.dataset.cat];
+  if (progressFill) {
+    const totalUnlocked = unlockedCats.length + unlockedPieces.length;
+    const totalPossible = 12; // 7 cats + 5 pieces
+    const progress = Math.min((totalUnlocked / totalPossible) * 100, 100);
+    progressFill.style.width = `${progress}%`;
+  }
+}
 
-      // Update modal image
-      document.querySelector("#modal-image").src =
-        cat.image;
+// ==================== CREATE CAT ====================
+function createCatElement(cat) {
+  const button = document.createElement("button");
+  button.className = `cat-at-home cat-slot-${cat.order_index}`;
+  button.dataset.catId = cat.id;
+  button.dataset.catName = cat.name;
+  button.type = "button";
 
-      // Update cat name
-      document.querySelector("#modal-name").textContent =
-        button.dataset.cat;
+  const image = document.createElement("img");
+  image.src = getAssetUrl(cat.image_url);
+  image.alt = cat.name || "Cat";
+  button.appendChild(image);
 
-      // Update cat trait
-      document.querySelector("#modal-trait").textContent =
-        `☀  ${cat.trait}`;
+  button.addEventListener("click", () => openCatModal(cat));
 
-      // Update cat quote
-      document.querySelector("#modal-quote").textContent =
-        cat.quote;
+  requestAnimationFrame(() => button.classList.add("unlocked"));
+  image.onerror = () => {
+    image.style.display = "none";
+  };
 
-      // Show modal
-      document
-        .querySelector("#cat-modal")
-        .classList.remove("hidden");
-    });
-  });
+  return button;
+}
+// ==================== CREATE FURNITURE ====================
 
+function createFurnitureElement(piece) {
+  const element = document.createElement("div");
+  element.className = `house-piece house-piece-slot-${piece.order_index}`;
 
-// ==================== SETTINGS ====================
+  const image = document.createElement("img");
+  image.src = getAssetUrl(piece.image_url);
+  image.alt = piece.name || "Furniture";
+  element.appendChild(image);
 
-document
-  .querySelector("#settings-button")
-  .addEventListener("click", () => {
+  requestAnimationFrame(() => element.classList.add("unlocked"));
+  image.onerror = () => {
+    image.style.display = "none";
+  };
 
-    document
-      .querySelector("#settings-modal")
-      .classList.remove("hidden");
-  });
+  return element;
+}
 
+// ==================== CAT MODAL ====================
 
-// Close modals
-document.querySelectorAll("[data-close]").forEach((button) => {
+function openCatModal(cat) {
+  const modal = document.querySelector("#cat-modal");
 
-  button.addEventListener("click", () => {
+  const image = document.querySelector("#modal-image");
 
-    button
-      .closest(".modal")
-      .classList.add("hidden");
+  const name = document.querySelector("#modal-name");
+
+  const trait = document.querySelector("#modal-trait");
+
+  const quote = document.querySelector("#modal-quote");
+
+  image.src = getAssetUrl(cat.image_url);
+
+  image.alt = cat.name || "Cat portrait";
+
+  name.textContent = cat.name || "Cat";
+
+  trait.textContent = `☀  ${cat.detail || ""}`;
+
+  if (cat.quote) {
+    quote.textContent = cat.quote;
+    quote.classList.remove("hidden");
+  } else {
+    quote.textContent = "";
+    quote.classList.add("hidden");
+  }
+
+  modal.classList.remove("hidden");
+}
+
+document.querySelector("#close-reveal").addEventListener("click", () => {
+  showView("timer");
+});
+
+// ==================== ROOM SWITCHER ====================
+
+document.querySelectorAll(".room-tile.locked").forEach((tile) => {
+  tile.addEventListener("click", () => {
+    document.querySelector("#coming-soon-modal").classList.remove("hidden");
   });
 });
 
+document.querySelector(".room-tile.active")?.addEventListener("click", () => {
+  // Already on the unlocked room — no-op, but keeps the tile interactive-feeling.
+});
 
-// ==================== RESET DEMO DATA ====================
+// ==================== PROFILE ====================
 
-document
-  .querySelector("#reset-data")
-  .addEventListener("click", () => {
+async function loadProfile() {
+  try {
+    const data = await apiRequest("/user/profile");
 
-    // Reset house progress
-    catsFound = 0;
-    piecesFound = 0;
+    const user = data.user || data;
 
-    // Update house
-    updateHouse();
+    currentUser = user;
 
-    // Close settings
-    document
-      .querySelector("#settings-modal")
-      .classList.add("hidden");
+    localStorage.setItem("quietpaws_user", JSON.stringify(user));
+
+    const profileName = document.querySelector("#profile-name");
+
+    const profileEmail = document.querySelector("#profile-email");
+
+    const profileSessions = document.querySelector("#profile-sessions");
+
+    const profileCurrentStreak = document.querySelector(
+      "#profile-current-streak",
+    );
+
+    const profileBestStreak = document.querySelector("#profile-best-streak");
+
+    if (profileName) {
+      profileName.textContent = user.name || "QuietPaws user";
+    }
+
+    if (profileEmail) {
+      profileEmail.textContent = user.email || "";
+    }
+
+    if (profileSessions) {
+      profileSessions.textContent = user.totalSessions ?? 0;
+    }
+
+    if (profileCurrentStreak) {
+      profileCurrentStreak.textContent = user.streak?.current ?? 0;
+    }
+
+    if (profileBestStreak) {
+      profileBestStreak.textContent = user.streak?.best ?? 0;
+    }
+
+    updateStreak(user.streak?.current ?? 0, user.streak?.best ?? 0);
+  } catch (error) {
+    console.error("Could not load profile:", error);
+  }
+}
+
+// ==================== SETTINGS ====================
+
+document.querySelector("#settings-button").addEventListener("click", () => {
+  document.querySelector("#settings-modal").classList.remove("hidden");
+});
+
+// ==================== CLOSE MODALS ====================
+
+document.querySelectorAll("[data-close]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const modal = button.closest(".modal");
+
+    if (modal) {
+      modal.classList.add("hidden");
+    }
   });
+});
 
+// Close modal when clicking outside
+
+document.querySelectorAll(".modal").forEach((modal) => {
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+});
+
+// ==================== RESET DATA ====================
+
+document.querySelector("#reset-data").addEventListener("click", async () => {
+  const confirmed = window.confirm(
+    "Reset demo data? This will clear your local login session.",
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  clearAuth();
+
+  clearInterval(timerId);
+
+  timerId = null;
+  running = false;
+
+  remaining = totalSeconds;
+
+  updateTimer();
+
+  document.querySelector("#settings-modal").classList.add("hidden");
+
+  appView.classList.add("hidden");
+  revealView.classList.add("hidden");
+
+  authView.classList.remove("hidden");
+
+  setAuthMode("login");
+});
 
 // ==================== LOG OUT ====================
 
-document
-  .querySelector("#logout")
-  .addEventListener("click", () => {
+function handleLogout() {
+  clearAuth();
 
-    // Close settings
-    document
-      .querySelector("#settings-modal")
-      .classList.add("hidden");
+  clearInterval(timerId);
 
-    // Hide application
-    appView.classList.add("hidden");
+  timerId = null;
+  running = false;
 
-    // Show authentication screen
-    authView.classList.remove("hidden");
-  });
+  appView.classList.add("hidden");
+  revealView.classList.add("hidden");
 
+  authView.classList.remove("hidden");
 
-// ==================== INITIAL STATE ====================
+  setAuthMode("login");
+}
 
-// Set initial timer display
+document.querySelector("#logout").addEventListener("click", () => {
+  document.querySelector("#settings-modal").classList.add("hidden");
+
+  handleLogout();
+});
+
+// ==================== HTML ESCAPE ====================
+
+function escapeHtml(value) {
+  const div = document.createElement("div");
+
+  div.textContent = String(value ?? "");
+
+  return div.innerHTML;
+}
+
+// ==================== INITIALIZATION ====================
+
+loadSavedUser();
+
+setAuthMode("login");
+
 updateTimer();
 
-// Set initial house progress
-updateHouse();
+// If a saved token exists,
+// try opening the application.
+
+if (token) {
+  authView.classList.add("hidden");
+  appView.classList.remove("hidden");
+
+  showView("timer");
+
+  loadProfile().catch(() => {
+    handleLogout();
+  });
+}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 
 /* ==================== GLOBAL STYLES ==================== */
 
@@ -18,12 +18,7 @@
 
 body {
   margin: 0;
-  background: linear-gradient(
-    135deg,
-    #f5fbf8,
-    #fcfffd 65%,
-    #f3fff4
-  );
+  background: linear-gradient(135deg, #f5fbf8, #fcfffd 65%, #f3fff4);
   color: var(--text);
   font-family: "DM Sans", sans-serif;
   min-height: 100vh;
@@ -55,7 +50,6 @@ h3,
 p {
   margin: 0;
 }
-
 
 /* ==================== AUTH ==================== */
 
@@ -123,13 +117,27 @@ label {
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"] {
   padding: 14px 13px;
   border: 1px solid #b5c5c1;
   border-radius: 10px;
   background: #fbfdfb;
   font-size: 1.1rem;
   outline-color: var(--ink);
+}
+
+.signup-only.hidden {
+  display: none;
+}
+
+.intention-field {
+  width: min(520px, 90vw);
+  margin: 30px auto 0;
+}
+
+.intention-field input {
+  width: 100%;
 }
 
 .form-row {
@@ -185,17 +193,24 @@ input[type="password"] {
   width: 100%;
 }
 
-
 /* ==================== HEADER ==================== */
 
 header {
   height: 94px;
   border-bottom: 3px solid var(--line);
   background: #fcfffd;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: 0 38px;
+}
+
+header nav {
+  justify-self: center;
+}
+
+header .icon-button {
+  justify-self: end;
 }
 
 .brand {
@@ -232,7 +247,6 @@ nav {
   font-size: 1.8rem;
 }
 
-
 /* ==================== STREAK ==================== */
 
 .streak {
@@ -268,15 +282,21 @@ nav {
 .trophy {
   justify-content: flex-end;
   color: #56775b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
+.trophy strong {
+  font-size: 1rem;
+  color: var(--text);
+}
 
 /* ==================== PAGE LAYOUT ==================== */
 
 .page {
   min-height: calc(100vh - 155px);
 }
-
 
 /* ==================== TIMER ==================== */
 
@@ -287,17 +307,30 @@ nav {
 }
 
 .timer-ring {
-  width: 422px;
+  width: 360px;
   aspect-ratio: 1;
-  border: 26px solid var(--aqua);
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: conic-gradient(
-    var(--aqua) var(--progress, 100%),
-    #e6f3f0 0
+    var(--aqua) 0% var(--progress, 100%),
+    #e6f3f0 var(--progress, 100%) 100%
   );
   position: relative;
+}
+
+.timer-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 26px;
+  background: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 .timer-ring:before {
@@ -313,16 +346,25 @@ nav {
   width: 220px;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 3px solid var(--line);
+  border: none;
   display: grid;
   place-items: center;
   align-content: center;
-  background: #f8fcfa;
+  background: transparent;
+}
+.big-paw {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-.big-paw {
-  font-size: 3rem;
-  line-height: 0.6;
+.big-paw img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  display: block;
 }
 
 .timer-inner strong {
@@ -339,7 +381,7 @@ nav {
 .durations {
   display: flex;
   gap: 19px;
-  margin-top: 62px;
+  margin-top: 35px;
 }
 
 .durations button {
@@ -357,11 +399,19 @@ nav {
   box-shadow: 0 8px 13px #55988c30;
 }
 
+.running-countdown {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 30px; /* matches .durations margin-top so layout doesn't jump */
+  display: block;
+}
+
 .controls {
   display: flex;
   align-items: center;
   gap: 32px;
-  margin-top: 55px;
+  margin-top: 30px;
 }
 
 .round {
@@ -392,12 +442,335 @@ nav {
   margin-top: 25px;
 }
 
+/* ==================== BREAK REASON ==================== */
+
+.break-reason {
+  width: min(500px, 80vw);
+  margin: 10px auto 0;
+  text-align: left;
+}
+
+.break-reason label {
+  display: block;
+  font-size: 1.05rem;
+  color: #222;
+  margin-bottom: 9px;
+}
+
+.break-reason textarea {
+  width: 100%;
+  padding: 14px 13px;
+  border: 1px solid #b5c5c1;
+  border-radius: 14px;
+  background: #fbfdfb;
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.05rem;
+  color: var(--text);
+  resize: vertical;
+  min-height: 90px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.break-reason textarea::placeholder {
+  color: #a3b3ae;
+}
+
+.break-reason textarea:focus {
+  border-color: var(--ink);
+  background: #fff;
+  box-shadow: 0 0 0 4px #2d6d6415;
+}
 
 /* ==================== HOUSE ==================== */
+/* .room {
+  width: min(880px, 90vw);
+  height: 480px;
+  margin: auto;
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #f3f8f5;
+  box-shadow: 0 20px 40px #76968c18;
+  border: 1px solid #d5e9dd;
+} */
+.room {
+  width: min(880px, 90vw);
+  aspect-ratio: 16 / 9; /* replace with your Room.png's real ratio */
+  margin: auto;
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #f3f8f5;
+  box-shadow: 0 20px 40px #76968c18;
+  border: 1px solid #d5e9dd;
+}
 
+.room-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* fits Room.png fully, no stretch, no overflow */
+  display: block;
+}
+
+.house-collectibles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.house-collectibles .cat-at-home,
+.house-collectibles .house-piece {
+  position: absolute;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  pointer-events: none;
+}
+
+.house-collectibles .cat-at-home.unlocked,
+.house-collectibles .house-piece.unlocked {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* ---- Furniture slots ---- */
+
+.house-piece-slot-1 {
+  left: 5%;
+  top: 10%;
+  width: 90%;
+  height: 80%;
+  z-index: 2;
+} /* Bed — floor, left side */
+.house-piece-slot-2 {
+  left: 14%;
+  top: 9%;
+  width: 75%;
+  height: 85%;
+} /* Carpet — floor, center */
+.house-piece-slot-3 {
+  left: 29%;
+  top: 16%;
+  width: 45%;
+  height: 60%;
+} /* Cat-scratcher — floor, right side */
+.house-piece-slot-4 {
+  left: 14%;
+  top: 14%;
+  width: 70%;
+  height: 70%;
+} /* Shelves — right wall */
+.house-piece-slot-5 {
+  left: 23%;
+  top: 11%;
+  width: 54%;
+  height: 63%;
+} /* Wall-decor — left wall, above window */
+
+/* ---- Cat slots ---- */
+
+.cat-slot-1 {
+  left: 51%;
+  top: 36%;
+  width: 8%;
+  height: 10%;
+  z-index: 5;
+}
+.cat-slot-2 {
+  left: 50%;
+  top: 70%;
+  width: 10%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-3 {
+  left: 58%;
+  top: 25%;
+  width: 9%;
+  height: 12%;
+  z-index: 5;
+}
+.cat-slot-4 {
+  left: 33%;
+  top: 50%;
+  width: 8%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-5 {
+  left: 41%;
+  top: 36%;
+  width: 10%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-6 {
+  left: 52%;
+  top: 56%;
+  width: 8%;
+  height: 11%;
+  z-index: 5;
+}
+.cat-slot-7 {
+  left: 35%;
+  top: 62%;
+  width: 11%;
+  height: 15%;
+  z-index: 5;
+}
+
+.house-collectibles .cat-at-home img,
+.house-collectibles .house-piece img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  color: transparent; /* hides alt text if the image 404s */
+}
+
+.room-switcher {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  margin: 0 auto 8px;
+  max-width: min(880px, 90vw);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.room-switcher::-webkit-scrollbar {
+  height: 6px;
+}
+
+.room-switcher::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+.room-tile {
+  position: relative;
+  flex: 0 0 auto;
+  width: 108px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #e3ece7;
+  background: #eef6f1;
+  transition:
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.room-tile:hover {
+  transform: translateY(-2px);
+}
+
+.room-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.room-tile.active {
+  border-color: var(--ink);
+  box-shadow: 0 6px 14px #2d6d6425;
+}
+
+.room-tile.locked img {
+  filter: grayscale(45%) brightness(0.92); /* a bit more muted than last pass (25%/0.97) */
+  opacity: 0.45; /* was 0.85 — pull back slightly so it reads as locked at a glance */
+}
+
+.room-tile.locked:hover {
+  transform: none;
+}
+.room-tile > span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 6px 5px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(to top, #23484095, transparent);
+  z-index: 3;
+}
+
+.room-tile.active > span {
+  background: linear-gradient(to top, #2d6d64c0, transparent);
+}
+.room-tile .lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+
+.room-tile .lock .icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px #23484045;
+}
+.room-tile .lock::before {
+  content: none; /* remove the old halo trick entirely — it was breaking the stacking context and hiding the icon */
+}
+
+.modal-card.coming-soon {
+  background: #fff; /* override the portrait-gradient background entirely */
+  padding-top: 40px;
+}
+
+.coming-soon-icon {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--soft);
+  border: 2px solid var(--line);
+  font-size: 2rem;
+}
+
+.modal-card.coming-soon h2 {
+  font-size: 1.7rem;
+  margin-bottom: 4px;
+}
+
+.modal-card.coming-soon .trait {
+  border: none;
+  background: var(--soft);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 18px 20px;
+  margin: 20px auto 30px;
+}
+/* ==================== HOUSE ==================== */
 .house-heading {
   text-align: center;
-  padding: 48px 20px 35px;
+  padding: 20px 20px 35px;
 }
 
 .house-heading h2 {
@@ -427,193 +800,6 @@ nav {
   background: #70ada5;
   border-radius: 8px;
 }
-
-.room {
-  width: min(880px, 90vw);
-  height: 450px;
-  margin: auto;
-  position: relative;
-  border-radius: 26px;
-  background: linear-gradient(
-    160deg,
-    #dff4ef 0 62%,
-    #f7eddb 62%
-  );
-  overflow: hidden;
-  box-shadow: 0 20px 40px #76968c18;
-  border: 1px solid #d5e9dd;
-}
-
-.room:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    160deg,
-    transparent 0 44px,
-    #d9cbb8 45px 47px,
-    transparent 48px 90px
-  );
-  opacity: 0.35;
-  top: 63%;
-}
-
-.window {
-  position: absolute;
-  width: 260px;
-  height: 190px;
-  right: 65px;
-  top: 48px;
-  background: #fff9e9;
-  border: 9px solid #f5f0e9;
-  display: grid;
-  grid-template: 1fr 1fr / 1fr 1fr;
-  box-shadow: inset 0 0 0 2px #c4ddcf;
-}
-
-.window i {
-  border: 1px solid #c4ddcf;
-}
-
-.sun {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #f8d77c;
-  right: 155px;
-  top: 75px;
-  filter: blur(1px);
-}
-
-.picture {
-  position: absolute;
-  left: 85px;
-  top: 50px;
-  border: 8px solid #fffaf2;
-  background: #e9f5e9;
-  width: 85px;
-  height: 105px;
-  display: grid;
-  place-items: center;
-  font-size: 2rem;
-  color: #90ae90;
-}
-
-.plant {
-  position: absolute;
-  left: 225px;
-  top: 115px;
-  font-size: 5rem;
-  color: #7bb38a;
-}
-
-.lamp {
-  position: absolute;
-  right: 42px;
-  bottom: 144px;
-  font-size: 5rem;
-  color: #d9b184;
-}
-
-.sofa {
-  position: absolute;
-  left: 95px;
-  bottom: 92px;
-  width: 290px;
-  height: 115px;
-  background: #9ccfc8;
-  border-radius: 50px 50px 17px 17px;
-  border-bottom: 15px solid #699f9a;
-  z-index: 2;
-}
-
-.sofa span {
-  position: absolute;
-  width: 110px;
-  height: 70px;
-  border-radius: 30px;
-  background: #b8e1d9;
-  left: 86px;
-  top: -8px;
-}
-
-.sofa i {
-  position: absolute;
-  width: 55px;
-  height: 50px;
-  background: #f9f5eb;
-  transform: rotate(15deg);
-  right: 30px;
-  top: 28px;
-}
-
-.table {
-  position: absolute;
-  left: 420px;
-  bottom: 120px;
-  width: 100px;
-  height: 60px;
-  border-radius: 50%;
-  background: #d9b589;
-  color: #fff;
-  text-align: center;
-  padding-top: 15px;
-  font-size: 1.3rem;
-  z-index: 3;
-}
-
-.rug {
-  position: absolute;
-  right: 190px;
-  bottom: 35px;
-  width: 300px;
-  height: 85px;
-  border-radius: 50%;
-  background: #aee2db;
-  opacity: 0.7;
-}
-
-.cat-at-home {
-  position: absolute;
-  z-index: 4;
-  width: 145px;
-  height: 175px;
-  bottom: 35px;
-  right: 110px;
-  border-radius: 45%;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 8px 15px #567c7026;
-}
-
-.cat-at-home img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  mix-blend-mode: screen;
-}
-
-.cat-two {
-  left: 385px;
-  bottom: 138px;
-  width: 100px;
-  height: 125px;
-}
-
-.empty-spot {
-  position: absolute;
-  right: 38px;
-  bottom: 45px;
-  width: 72px;
-  height: 72px;
-  border: 3px dashed #a9c5bd;
-  color: #88aaa1;
-  border-radius: 50%;
-  font-size: 1.8rem;
-  z-index: 4;
-}
-
 
 /* ==================== PROFILE ==================== */
 
@@ -645,12 +831,68 @@ nav {
   margin: 12px 0 22px;
 }
 
+.profile-avatar img {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--soft);
+  border: 2px solid var(--line);
+  font-size: 2.2rem;
+}
+
+.profile-card > #profile-email {
+  color: #72807c;
+  font-size: 0.95rem;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.profile-stats div {
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+}
+
+.profile-stats strong,
+.profile-stats span {
+  display: block;
+}
+
+.profile-stats strong {
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.profile-stats span {
+  margin-top: 4px;
+  color: #72807c;
+  font-size: 0.75rem;
+}
 
 /* ==================== REVEAL ==================== */
 
 .reveal-view {
   text-align: center;
   padding: 12px 20px;
+}
+
+.reveal-view {
+  position: relative;
+}
+
+.reveal-view .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
 }
 
 .reveal-view h2 {
@@ -674,7 +916,6 @@ nav {
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
-  mix-blend-mode: screen;
   filter: drop-shadow(0 10px 15px #627f7625);
 }
 
@@ -693,13 +934,18 @@ nav {
   margin-top: 28px;
 }
 
+#reward-detail {
+  color: #66736f;
+  font-size: 1rem;
+  min-height: 1.2em;
+}
+
 .reveal-actions {
   width: min(550px, 90vw);
   margin: 66px auto;
   display: grid;
   gap: 12px;
 }
-
 
 /* ==================== MODALS ==================== */
 
@@ -715,15 +961,12 @@ nav {
 
 .modal-card {
   position: relative;
-  width: min(620px, 95vw);
+  width: min(420px, 92vw);
   text-align: center;
   border: 3px solid var(--line);
-  border-radius: 30px;
-  padding: 55px 34px 44px;
-  background: linear-gradient(
-    #e6f2e2 0 170px,
-    #fcfffd 170px
-  );
+  border-radius: 24px;
+  padding: 40px 26px 30px;
+  background: linear-gradient(#e6f2e2 0 130px, #fcfffd 130px);
   box-shadow: 0 20px 40px #23484030;
 }
 
@@ -735,12 +978,12 @@ nav {
 }
 
 .cat-portrait {
-  height: 175px;
-  width: 175px;
+  height: 130px;
+  width: 130px;
   background: white;
   border: 3px solid #70ada5;
   border-radius: 50%;
-  margin: -38px auto 32px;
+  margin: -30px auto 20px;
   overflow: hidden;
 }
 
@@ -748,12 +991,11 @@ nav {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
 }
 
 .modal-card h2 {
   color: var(--ink);
-  font-size: 2.6rem;
+  font-size: 1.9rem;
 }
 
 .found {
@@ -794,7 +1036,6 @@ nav {
 .settings .text-button {
   margin-top: 18px;
 }
-
 
 /* ==================== MOBILE ==================== */
 
@@ -863,36 +1104,8 @@ nav {
     font-size: 2.1rem;
   }
 
-  .room {
-    height: 380px;
-    transform: scale(0.98);
-    transform-origin: top;
-  }
-
-  .window {
-    right: 10px;
-    transform: scale(0.72);
-    transform-origin: top right;
-  }
-
-  .sofa {
-    left: 12px;
-    transform: scale(0.8);
-    transform-origin: bottom left;
-  }
-
-  .plant {
-    left: 180px;
-    top: 110px;
-  }
-
-  .cat-at-home {
-    right: 45px;
-    bottom: 40px;
-  }
-
-  .cat-two {
-    left: 270px;
+  .room-tile {
+    width: 96px;
   }
 
   .reveal-view h2 {
@@ -901,6 +1114,30 @@ nav {
 
   .reveal-actions {
     margin: 35px auto;
+  }
+
+  .intention-field {
+    width: min(92vw, 420px);
+  }
+
+  .profile-page {
+    padding: 35px 18px;
+  }
+
+  .profile-stats {
+    gap: 6px;
+  }
+
+  .profile-stats div {
+    padding: 11px 4px;
+  }
+
+  .profile-stats strong {
+    font-size: 1.1rem;
+  }
+
+  .profile-stats span {
+    font-size: 0.65rem;
   }
 
   .modal-card {
