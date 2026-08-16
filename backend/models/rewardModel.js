@@ -1,7 +1,9 @@
-const db = require('../db');
+const db = require("../db");
 
 function getFullRewardsCatalog(userId) {
-  const rows = db.prepare(`
+  const rows = db
+    .prepare(
+      `
     SELECT 
       c.id,
       c.type,
@@ -14,7 +16,9 @@ function getFullRewardsCatalog(userId) {
     FROM collectibles c
     LEFT JOIN user_collectibles uc ON c.id = uc.collectible_id AND uc.user_id = ?
     ORDER BY c.type ASC, c.order_index ASC
-  `).all(userId);
+  `,
+    )
+    .all(userId);
 
   const cats = [];
   const pieces = [];
@@ -27,16 +31,18 @@ function getFullRewardsCatalog(userId) {
     if (isUnlocked) totalUnlocked++;
 
     const item = {
+      id: row.id,
       name: row.name,
       detail: row.detail,
       image_url: row.image_url,
+      order_index: row.order_index,
       unlocked: isUnlocked,
-      unlockedAt: isUnlocked ? row.unlockedAt : null
+      unlockedAt: isUnlocked ? row.unlockedAt : null,
     };
 
-    if (row.type === 'cat') {
+    if (row.type === "cat") {
       cats.push(item);
-    } else if (row.type === 'piece') {
+    } else if (row.type === "piece") {
       pieces.push(item);
     }
   }
@@ -46,32 +52,40 @@ function getFullRewardsCatalog(userId) {
   return {
     cats,
     pieces,
-    houseComplete
+    houseComplete,
   };
 }
 
 function unlockNextCollectible(userId, preferredType) {
   // 1. Preferred pool query
-  let nextItem = db.prepare(`
+  let nextItem = db
+    .prepare(
+      `
     SELECT c.id, c.type, c.name, c.detail, c.image_url, c.order_index
     FROM collectibles c
     WHERE c.type = ?
       AND c.id NOT IN (SELECT collectible_id FROM user_collectibles WHERE user_id = ?)
     ORDER BY c.order_index ASC
     LIMIT 1
-  `).get(preferredType, userId);
+  `,
+    )
+    .get(preferredType, userId);
 
   // 2. Fallback pool query if preferred pool is complete
   if (!nextItem) {
-    const altType = preferredType === 'cat' ? 'piece' : 'cat';
-    nextItem = db.prepare(`
+    const altType = preferredType === "cat" ? "piece" : "cat";
+    nextItem = db
+      .prepare(
+        `
       SELECT c.id, c.type, c.name, c.detail, c.image_url, c.order_index
       FROM collectibles c
       WHERE c.type = ?
         AND c.id NOT IN (SELECT collectible_id FROM user_collectibles WHERE user_id = ?)
       ORDER BY c.order_index ASC
       LIMIT 1
-    `).get(altType, userId);
+    `,
+      )
+      .get(altType, userId);
   }
 
   if (!nextItem) {
@@ -79,21 +93,23 @@ function unlockNextCollectible(userId, preferredType) {
   }
 
   const unlockedAt = new Date().toISOString();
-  db.prepare(`
+  db.prepare(
+    `
     INSERT INTO user_collectibles (user_id, collectible_id, unlocked_at)
     VALUES (?, ?, ?)
-  `).run(userId, nextItem.id, unlockedAt);
+  `,
+  ).run(userId, nextItem.id, unlockedAt);
 
   return {
     id: nextItem.id,
     type: nextItem.type,
     name: nextItem.name,
     detail: nextItem.detail,
-    image_url: nextItem.image_url
+    image_url: nextItem.image_url,
   };
 }
 
 module.exports = {
   getFullRewardsCatalog,
-  unlockNextCollectible
+  unlockNextCollectible,
 };

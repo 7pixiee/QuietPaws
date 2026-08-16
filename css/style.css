@@ -282,6 +282,14 @@ nav {
 .trophy {
   justify-content: flex-end;
   color: #56775b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trophy strong {
+  font-size: 1rem;
+  color: var(--text);
 }
 
 /* ==================== PAGE LAYOUT ==================== */
@@ -297,17 +305,6 @@ nav {
   place-items: center;
   padding-top: 25px;
 }
-
-/* .timer-ring {
-  width: 422px;
-  aspect-ratio: 1;
-  border: 26px solid var(--aqua);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: conic-gradient(var(--aqua) var(--progress, 100%), #e6f3f0 0);
-  position: relative;
-} */
 
 .timer-ring {
   width: 360px;
@@ -369,10 +366,6 @@ nav {
   object-fit: contain;
   display: block;
 }
-/* .big-paw {
-  font-size: 3rem;
-  line-height: 0.6;
-} */
 
 .timer-inner strong {
   font-size: 2.1rem;
@@ -490,9 +483,20 @@ nav {
 }
 
 /* ==================== HOUSE ==================== */
-.room {
+/* .room {
   width: min(880px, 90vw);
   height: 480px;
+  margin: auto;
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #f3f8f5;
+  box-shadow: 0 20px 40px #76968c18;
+  border: 1px solid #d5e9dd;
+} */
+.room {
+  width: min(880px, 90vw);
+  aspect-ratio: 16 / 9; /* replace with your Room.png's real ratio */
   margin: auto;
   position: relative;
   border-radius: 26px;
@@ -510,17 +514,6 @@ nav {
   object-fit: contain; /* fits Room.png fully, no stretch, no overflow */
   display: block;
 }
-/* 
- */
-
-/* .room-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-} */
 
 .house-collectibles {
   position: absolute;
@@ -531,21 +524,111 @@ nav {
 .house-collectibles .cat-at-home,
 .house-collectibles .house-piece {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
   padding: 0;
   border: none;
   background: none;
   box-shadow: none;
   border-radius: 0;
-  overflow: hidden; /* clip broken-image alt text instead of letting it spill */
+  overflow: hidden;
   opacity: 0;
   transform: scale(0.97);
   transition:
     opacity 0.6s ease,
     transform 0.6s ease;
   pointer-events: none;
+}
+
+.house-collectibles .cat-at-home.unlocked,
+.house-collectibles .house-piece.unlocked {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* ---- Furniture slots ---- */
+
+.house-piece-slot-1 {
+  left: 5%;
+  top: 10%;
+  width: 90%;
+  height: 80%;
+  z-index: 2;
+} /* Bed — floor, left side */
+.house-piece-slot-2 {
+  left: 14%;
+  top: 9%;
+  width: 75%;
+  height: 85%;
+} /* Carpet — floor, center */
+.house-piece-slot-3 {
+  left: 29%;
+  top: 16%;
+  width: 45%;
+  height: 60%;
+} /* Cat-scratcher — floor, right side */
+.house-piece-slot-4 {
+  left: 14%;
+  top: 14%;
+  width: 70%;
+  height: 70%;
+} /* Shelves — right wall */
+.house-piece-slot-5 {
+  left: 23%;
+  top: 11%;
+  width: 54%;
+  height: 63%;
+} /* Wall-decor — left wall, above window */
+
+/* ---- Cat slots ---- */
+
+.cat-slot-1 {
+  left: 51%;
+  top: 36%;
+  width: 8%;
+  height: 10%;
+  z-index: 5;
+}
+.cat-slot-2 {
+  left: 50%;
+  top: 70%;
+  width: 10%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-3 {
+  left: 58%;
+  top: 25%;
+  width: 9%;
+  height: 12%;
+  z-index: 5;
+}
+.cat-slot-4 {
+  left: 33%;
+  top: 50%;
+  width: 8%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-5 {
+  left: 41%;
+  top: 36%;
+  width: 10%;
+  height: 13%;
+  z-index: 5;
+}
+.cat-slot-6 {
+  left: 52%;
+  top: 56%;
+  width: 8%;
+  height: 11%;
+  z-index: 5;
+}
+.cat-slot-7 {
+  left: 35%;
+  top: 62%;
+  width: 11%;
+  height: 15%;
+  z-index: 5;
 }
 
 .house-collectibles .cat-at-home img,
@@ -555,13 +638,6 @@ nav {
   object-fit: contain;
   display: block;
   color: transparent; /* hides alt text if the image 404s */
-}
-
-.house-collectibles .cat-at-home.unlocked,
-.house-collectibles .house-piece.unlocked {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto; /* clickable once visible — see note below */
 }
 
 .room-switcher {
@@ -885,12 +961,12 @@ nav {
 
 .modal-card {
   position: relative;
-  width: min(620px, 95vw);
+  width: min(420px, 92vw);
   text-align: center;
   border: 3px solid var(--line);
-  border-radius: 30px;
-  padding: 55px 34px 44px;
-  background: linear-gradient(#e6f2e2 0 170px, #fcfffd 170px);
+  border-radius: 24px;
+  padding: 40px 26px 30px;
+  background: linear-gradient(#e6f2e2 0 130px, #fcfffd 130px);
   box-shadow: 0 20px 40px #23484030;
 }
 
@@ -902,12 +978,12 @@ nav {
 }
 
 .cat-portrait {
-  height: 175px;
-  width: 175px;
+  height: 130px;
+  width: 130px;
   background: white;
   border: 3px solid #70ada5;
   border-radius: 50%;
-  margin: -38px auto 32px;
+  margin: -30px auto 20px;
   overflow: hidden;
 }
 
@@ -919,7 +995,7 @@ nav {
 
 .modal-card h2 {
   color: var(--ink);
-  font-size: 2.6rem;
+  font-size: 1.9rem;
 }
 
 .found {
@@ -1032,40 +1108,8 @@ nav {
     font-size: 2.1rem;
   }
 
-  .room {
-    height: 380px;
-    transform: scale(0.98);
-    transform-origin: top;
-  }
-
   .room-tile {
     width: 96px;
-  }
-
-  .window {
-    right: 10px;
-    transform: scale(0.72);
-    transform-origin: top right;
-  }
-
-  .sofa {
-    left: 12px;
-    transform: scale(0.8);
-    transform-origin: bottom left;
-  }
-
-  .plant {
-    left: 180px;
-    top: 110px;
-  }
-
-  .cat-at-home {
-    right: 45px;
-    bottom: 40px;
-  }
-
-  .cat-two {
-    left: 270px;
   }
 
   .reveal-view h2 {
@@ -1098,19 +1142,6 @@ nav {
 
   .profile-stats span {
     font-size: 0.65rem;
-  }
-
-  .house-piece {
-    transform: scale(0.82);
-    transform-origin: center;
-  }
-
-  .house-piece-2 {
-    left: 335px;
-  }
-
-  .house-piece-4 {
-    left: 225px;
   }
 
   .modal-card {

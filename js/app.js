@@ -7,6 +7,16 @@ const API_BASE = "http://localhost:5000/api";
 const appView = document.querySelector("#app-view");
 const authView = document.querySelector("#auth-view");
 const revealView = document.querySelector("#reveal-view");
+const revealObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.attributeName === "class") {
+      console.log("revealView class changed to:", revealView.className);
+      console.trace("Called from:");
+    }
+  });
+});
+
+revealObserver.observe(revealView, { attributes: true });
 
 const pages = document.querySelectorAll(".page");
 const navLinks = document.querySelectorAll(".nav-link");
@@ -302,10 +312,11 @@ async function finishSession() {
         intention,
       }),
     });
+    console.log("Reveal shown at", new Date().toISOString());
 
     showReward(data.reward, selectedMinutes);
 
-    updateStreak(data.newStreak);
+    updateStreak(data.newStreak, data.bestStreak);
   } catch (error) {
     alert(error.message);
 
@@ -362,7 +373,13 @@ function showReward(reward, minutes) {
     rewardTitle.textContent =
       reward.type === "cat" ? "A new friend!" : "Your house grew!";
 
-    rewardQuote.textContent = "";
+    if (reward.quote) {
+      rewardQuote.textContent = reward.quote;
+      rewardQuote.classList.remove("hidden");
+    } else {
+      rewardQuote.textContent = "";
+      rewardQuote.classList.add("hidden");
+    }
   }
 
   rewardMinutes.textContent = minutes;
@@ -379,10 +396,7 @@ function getAssetUrl(imageUrl) {
 
   // If the backend ever gives us a complete URL,
   // use it directly.
-  if (
-    imageUrl.startsWith("http://") ||
-    imageUrl.startsWith("https://")
-  ) {
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
     return imageUrl;
   }
 
@@ -397,16 +411,17 @@ function getAssetUrl(imageUrl) {
 }
 // ==================== STREAK ====================
 
-function updateStreak(streak) {
+function updateStreak(current, best) {
+  // <-- replace the old version here
   const streakCount = document.querySelector("#streak-count");
-
-  if (!streakCount) {
-    return;
+  const bestStreakCount = document.querySelector("#best-streak-count");
+  if (streakCount) {
+    const dayText = current === 1 ? "Day" : "Days";
+    streakCount.textContent = `${current} ${dayText} Streak`;
   }
-
-  const dayText = streak === 1 ? "Day" : "Days";
-
-  streakCount.textContent = `${streak} ${dayText} Streak`;
+  if (bestStreakCount && best !== undefined) {
+    bestStreakCount.textContent = best;
+  }
 }
 
 // ==================== TIMER DURATION ====================
@@ -596,8 +611,9 @@ function updateHouseCounts(cats, pieces) {
   const progressFill = document.querySelector("#progress-fill");
 
   if (progressFill) {
-    const total = unlockedCats.length + unlockedPieces.length;
-    const progress = Math.min((total / 24) * 100, 100);
+    const totalUnlocked = unlockedCats.length + unlockedPieces.length;
+    const totalPossible = 12; // 7 cats + 5 pieces
+    const progress = Math.min((totalUnlocked / totalPossible) * 100, 100);
     progressFill.style.width = `${progress}%`;
   }
 }
@@ -605,7 +621,7 @@ function updateHouseCounts(cats, pieces) {
 // ==================== CREATE CAT ====================
 function createCatElement(cat) {
   const button = document.createElement("button");
-  button.className = "cat-at-home";
+  button.className = `cat-at-home cat-slot-${cat.order_index}`;
   button.dataset.catId = cat.id;
   button.dataset.catName = cat.name;
   button.type = "button";
@@ -628,7 +644,7 @@ function createCatElement(cat) {
 
 function createFurnitureElement(piece) {
   const element = document.createElement("div");
-  element.className = "house-piece";
+  element.className = `house-piece house-piece-slot-${piece.order_index}`;
 
   const image = document.createElement("img");
   image.src = getAssetUrl(piece.image_url);
@@ -664,7 +680,13 @@ function openCatModal(cat) {
 
   trait.textContent = `☀  ${cat.detail || ""}`;
 
-  quote.textContent = cat.quote || "";
+  if (cat.quote) {
+    quote.textContent = cat.quote;
+    quote.classList.remove("hidden");
+  } else {
+    quote.textContent = "";
+    quote.classList.add("hidden");
+  }
 
   modal.classList.remove("hidden");
 }
@@ -729,7 +751,7 @@ async function loadProfile() {
       profileBestStreak.textContent = user.streak?.best ?? 0;
     }
 
-    updateStreak(user.streak?.current ?? 0);
+    updateStreak(user.streak?.current ?? 0, user.streak?.best ?? 0);
   } catch (error) {
     console.error("Could not load profile:", error);
   }
