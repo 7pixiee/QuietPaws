@@ -56,13 +56,13 @@ async function initDb() {
     const countRes = await pool.query("SELECT COUNT(*)::int as count FROM collectibles");
     if (countRes.rows[0].count === 0) {
       const collectiblesData = [
-        ["cat", "Mochi", "Naps in sunbeams, ignores everyone", "/assets/cats/mochi.png", 1],
-        ["cat", "Biscuit", "Judges your life choices silently", "/assets/cats/biscuit.png", 2],
-        ["cat", "Luna", "Watches the night sky with curiosity", "/assets/cats/luna.png", 3],
-        ["cat", "Oliver", "Always ready for a gentle purr", "/assets/cats/oliver.png", 4],
-        ["cat", "Cleo", "Sits like royalty on cozy cushions", "/assets/cats/cleo.png", 5],
-        ["cat", "Simba", "Brave little explorer of quiet corners", "/assets/cats/simba.png", 6],
-        ["cat", "Peanut", "Small, playful, and loves cardboards", "/assets/cats/peanut.png", 7],
+        ["cat", "Mochi", "Naps in sunbeams, ignores everyone", "/assets/cats/Mochi.png", 1],
+        ["cat", "Biscuit", "Judges your life choices silently", "/assets/cats/Biscuit.png", 2],
+        ["cat", "Luna", "Watches the night sky with curiosity", "/assets/cats/Luna.png", 3],
+        ["cat", "Oliver", "Always ready for a gentle purr", "/assets/cats/Oliver.png", 4],
+        ["cat", "Cleo", "Sits like royalty on cozy cushions", "/assets/cats/Cleo.png", 5],
+        ["cat", "Simba", "Brave little explorer of quiet corners", "/assets/cats/Simba.png", 6],
+        ["cat", "Peanut", "Small, playful, and loves cardboards", "/assets/cats/Peanut.png", 7],
         ["piece", "Cozy Bed", "A warm little nook for napping", "/assets/home/main-home/Bed.png", 1],
         ["piece", "Soft Carpet", "Warms up the floor underfoot", "/assets/home/main-home/Carpet.png", 2],
         ["piece", "Cat Scratcher", "Keeps claws happy and furniture safe", "/assets/home/main-home/Cat-scratcher.png", 3],
