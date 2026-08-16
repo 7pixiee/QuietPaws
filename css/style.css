@@ -123,13 +123,27 @@ label {
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"] {
   padding: 14px 13px;
   border: 1px solid #b5c5c1;
   border-radius: 10px;
   background: #fbfdfb;
   font-size: 1.1rem;
   outline-color: var(--ink);
+}
+
+.signup-only.hidden {
+  display: none;
+}
+
+.intention-field {
+  width: min(520px, 90vw);
+  margin: 30px auto 0;
+}
+
+.intention-field input {
+  width: 100%;
 }
 
 .form-row {
@@ -591,7 +605,6 @@ nav {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
 }
 
 .cat-two {
@@ -599,6 +612,86 @@ nav {
   bottom: 138px;
   width: 100px;
   height: 125px;
+}
+
+.house-collectibles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.house-collectibles > .cat-at-home,
+.house-collectibles > .house-piece {
+  pointer-events: auto;
+}
+
+.empty-house-message {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 80%);
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: #ffffffd9;
+  border: 1px dashed #a9c5bd;
+  color: #6d7875;
+  text-align: center;
+}
+
+.house-piece {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  width: 115px;
+  min-height: 100px;
+  padding: 8px;
+  border-radius: 18px;
+  background: #fff9eddd;
+  border: 1px solid #d9cbb8;
+  box-shadow: 0 8px 15px #567c7020;
+}
+
+.house-piece img {
+  width: 70px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.house-piece span {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #5b6865;
+  font-size: 0.72rem;
+}
+
+.house-piece-1 {
+  left: 30px;
+  bottom: 34px;
+}
+
+.house-piece-2 {
+  left: 420px;
+  bottom: 45px;
+}
+
+.house-piece-3 {
+  right: 28px;
+  bottom: 40px;
+}
+
+.house-piece-4 {
+  left: 300px;
+  top: 55px;
+}
+
+.house-piece img.image-missing {
+  opacity: 0.35;
 }
 
 .empty-spot {
@@ -645,6 +738,53 @@ nav {
   margin: 12px 0 22px;
 }
 
+.profile-avatar {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--soft);
+  border: 2px solid var(--line);
+  font-size: 2.2rem;
+}
+
+.profile-card > #profile-email {
+  color: #72807c;
+  font-size: 0.95rem;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.profile-stats div {
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+}
+
+.profile-stats strong,
+.profile-stats span {
+  display: block;
+}
+
+.profile-stats strong {
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.profile-stats span {
+  margin-top: 4px;
+  color: #72807c;
+  font-size: 0.75rem;
+}
+
 
 /* ==================== REVEAL ==================== */
 
@@ -674,7 +814,6 @@ nav {
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
-  mix-blend-mode: screen;
   filter: drop-shadow(0 10px 15px #627f7625);
 }
 
@@ -691,6 +830,12 @@ nav {
 
 .reveal-card p:last-child {
   margin-top: 28px;
+}
+
+#reward-detail {
+  color: #66736f;
+  font-size: 1rem;
+  min-height: 1.2em;
 }
 
 .reveal-actions {
@@ -748,7 +893,6 @@ nav {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
 }
 
 .modal-card h2 {
@@ -905,6 +1049,43 @@ nav {
 
   .reveal-actions {
     margin: 35px auto;
+  }
+
+  .intention-field {
+    width: min(92vw, 420px);
+  }
+
+  .profile-page {
+    padding: 35px 18px;
+  }
+
+  .profile-stats {
+    gap: 6px;
+  }
+
+  .profile-stats div {
+    padding: 11px 4px;
+  }
+
+  .profile-stats strong {
+    font-size: 1.1rem;
+  }
+
+  .profile-stats span {
+    font-size: 0.65rem;
+  }
+
+  .house-piece {
+    transform: scale(0.82);
+    transform-origin: center;
+  }
+
+  .house-piece-2 {
+    left: 335px;
+  }
+
+  .house-piece-4 {
+    left: 225px;
   }
 
   .modal-card {

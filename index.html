@@ -4,169 +4,397 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuietPaws</title>
-  <link rel="stylesheet" href="/css/style.css" />
+
+  <link rel="stylesheet" href="./css/style.css" />
 </head>
 
 <body>
+
   <main id="app">
 
-    <!-- ==================== AUTH VIEW ==================== -->
+    <!-- =========================================================
+         AUTH VIEW
+    ========================================================== -->
     <section id="auth-view" class="view auth-view">
+
       <div class="auth-brand">
         <span class="paw">🐾</span>
+
         <h1>QuietPaws</h1>
-        <p>A quiet space for your mind to Relax.</p>
+
+        <p>
+          A quiet space for your mind to relax.
+        </p>
       </div>
 
+
       <form class="auth-card" id="auth-form">
+
+        <!-- Login / Signup tabs -->
         <div class="tabs">
-          <button type="button" class="tab active" data-mode="login">
+
+          <button
+            type="button"
+            class="tab active"
+            data-mode="login"
+          >
             Log in
           </button>
 
-          <button type="button" class="tab" data-mode="signup">
+          <button
+            type="button"
+            class="tab"
+            data-mode="signup"
+          >
             Sign up
           </button>
+
         </div>
 
+
+        <!-- Name - signup only -->
+        <label class="hidden">
+          Name
+
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Your name"
+            autocomplete="name"
+          />
+        </label>
+
+
+        <!-- Email -->
         <label>
           Email
+
           <input
+            id="email"
+            name="email"
             required
             type="email"
             placeholder="you@example.com"
+            autocomplete="email"
           />
         </label>
 
+
+        <!-- Password -->
         <label>
           Password
+
           <input
+            id="password"
+            name="password"
             required
             type="password"
             placeholder="••••••••"
+            autocomplete="current-password"
           />
         </label>
 
+
+        <!-- Login options -->
         <div class="form-row">
+
           <label class="check">
-            <input type="checkbox" />
-            <span>Stay logged in</span>
+
+            <input
+              id="stay-logged-in"
+              type="checkbox"
+            />
+
+            <span>
+              Stay logged in
+            </span>
+
           </label>
 
-          <button type="button" class="text-button">
+
+          <button
+            type="button"
+            class="text-button"
+          >
             Forgot password?
           </button>
+
         </div>
 
-        <p class="error" id="auth-error"></p>
 
-        <button class="primary full" type="submit">
+        <!-- Auth error -->
+        <p
+          class="error"
+          id="auth-error"
+          aria-live="polite"
+        ></p>
+
+
+        <!-- Submit -->
+        <button
+          class="primary full"
+          id="auth-submit"
+          type="submit"
+        >
           Log In
         </button>
+
       </form>
+
     </section>
 
 
-    <!-- ==================== MAIN APP ==================== -->
-    <section id="app-view" class="hidden">
+    <!-- =========================================================
+         MAIN APPLICATION
+    ========================================================== -->
+    <section
+      id="app-view"
+      class="hidden"
+    >
 
-      <!-- Header -->
+      <!-- ==================== HEADER ==================== -->
       <header>
-        <button class="brand" data-view="timer">
-          <span class="paw small">●</span>
+
+        <button
+          class="brand"
+          type="button"
+          data-view="timer"
+        >
           QuietPaws
         </button>
 
+
         <nav>
-          <button data-view="timer" class="nav-link active">
+
+          <button
+            type="button"
+            data-view="timer"
+            class="nav-link active"
+          >
             Timer
           </button>
 
-          <button data-view="house" class="nav-link">
+          <button
+            type="button"
+            data-view="house"
+            class="nav-link"
+          >
             House
           </button>
 
-          <button data-view="profile" class="nav-link">
+          <button
+            type="button"
+            data-view="profile"
+            class="nav-link"
+          >
             Profile
           </button>
+
         </nav>
 
+
         <button
+          type="button"
           class="icon-button"
           id="settings-button"
           title="Settings"
+          aria-label="Open settings"
         >
           ⚙
         </button>
+
       </header>
 
 
-      <!-- Streak -->
+      <!-- ==================== STREAK ==================== -->
       <div class="streak">
+
         ♨
 
         <span>
-          <strong id="streak-count">3 Day Streak</strong>
-          <small>Nothing is ever lost.</small>
+
+          <strong id="streak-count">
+            0 Day Streak
+          </strong>
+
+          <small>
+            Nothing is ever lost.
+          </small>
+
         </span>
 
-        <span class="trophy">♕</span>
+        <span class="trophy">
+          ♕
+        </span>
+
       </div>
 
 
-      <!-- ==================== TIMER VIEW ==================== -->
-      <section class="view page" id="timer-view">
+      <!-- =========================================================
+           TIMER VIEW
+      ========================================================== -->
+      <section
+        class="view page"
+        id="timer-view"
+      >
+
         <div class="timer-wrap">
 
-          <div class="timer-ring" id="timer-ring">
+          <!-- Timer -->
+          <div
+            class="timer-ring"
+            id="timer-ring"
+          >
+
             <div class="timer-inner">
-              <span class="big-paw">🐾</span>
-              <strong id="time-display">5:00</strong>
-              <small>quiet time</small>
+
+              <span class="big-paw">
+                🐾
+              </span>
+
+              <strong id="time-display">
+                5:00
+              </strong>
+
+              <small>
+                quiet time
+              </small>
+
             </div>
+
           </div>
 
+
+          <!-- Duration buttons -->
           <div class="durations">
-            <button data-minutes="2">2 min</button>
-            <button data-minutes="5" class="selected">5 min</button>
-            <button data-minutes="10">10 min</button>
+
+            <button
+              type="button"
+              data-minutes="2"
+            >
+              2 min
+            </button>
+
+            <button
+              type="button"
+              data-minutes="5"
+              class="selected"
+            >
+              5 min
+            </button>
+
+            <button
+              type="button"
+              data-minutes="10"
+            >
+              10 min
+            </button>
+
           </div>
 
+
+          <!-- Timer controls -->
           <div class="controls">
-            <button class="round secondary" id="reset-timer">
+
+            <button
+              type="button"
+              class="round secondary"
+              id="reset-timer"
+              aria-label="Reset timer"
+            >
               ↻
             </button>
 
-            <button class="round play" id="start-timer">
+            <button
+              type="button"
+              class="round play"
+              id="start-timer"
+              aria-label="Start timer"
+            >
               ▶
             </button>
 
-            <button class="round secondary" id="stop-timer">
+            <button
+              type="button"
+              class="round secondary"
+              id="stop-timer"
+              aria-label="Stop timer"
+            >
               ■
             </button>
+
           </div>
 
-          <p class="caption">no sound will play</p>
+
+          <!-- Reason for break -->
+          <div class="break-reason">
+
+            <label for="break-reason">
+              Why are you taking this break?
+            </label>
+
+            <textarea
+              id="break-reason"
+              name="intention"
+              rows="3"
+              maxlength="500"
+              placeholder="I need a quiet moment because..."
+            ></textarea>
+
+          </div>
+
+
+          <p class="caption">
+            No sound will play.
+          </p>
+
         </div>
+
       </section>
 
 
-      <!-- ==================== HOUSE VIEW ==================== -->
-      <section class="view page hidden" id="house-view">
+      <!-- =========================================================
+           HOUSE VIEW
+      ========================================================== -->
+      <section
+        class="view page hidden"
+        id="house-view"
+      >
+
         <div class="house-heading">
-          <h2>Your Cozy Corner</h2>
+
+          <h2>
+            Your Cozy Corner
+          </h2>
 
           <p>
-            <span id="cats-found">3</span> of 12 cats found ·
-            <span id="pieces-found">2</span> of 12 pieces placed
+
+            <span id="cats-found">
+              0
+            </span>
+
+            of 12 cats found ·
+
+            <span id="pieces-found">
+              0
+            </span>
+
+            of 12 pieces placed
+
           </p>
+
 
           <div class="progress">
             <i id="progress-fill"></i>
           </div>
+
         </div>
 
+
+        <!-- House -->
         <div class="room">
+
           <div class="window">
             <i></i>
             <i></i>
@@ -174,148 +402,377 @@
             <i></i>
           </div>
 
-          <div class="sun"></div>
-          <div class="picture">✿</div>
-          <div class="plant">♣</div>
-          <div class="lamp">⌁</div>
 
-          <div class="sofa">
-            <span></span>
-            <i></i>
-            <i></i>
+          <div class="sun"></div>
+
+          <div class="picture">
+            ✿
           </div>
 
-          <div class="table">◯</div>
+          <div class="plant">
+            ♣
+          </div>
+
+          <div class="lamp">
+            ⌁
+          </div>
+
+
+          <div class="sofa">
+
+            <span></span>
+
+            <i></i>
+            <i></i>
+
+          </div>
+
+
+          <div class="table">
+            ◯
+          </div>
+
           <div class="rug"></div>
 
-          <button class="cat-at-home" data-cat="Luna">
-            <img src="assets/cats/cat3.jpeg" alt="Luna the cat" />
-          </button>
 
-          <button class="cat-at-home cat-two" data-cat="Mochi">
-            <img src="assets/cats/cat1.jpeg" alt="Mochi the cat" />
-          </button>
+          <!--
+            Dynamic rewards are inserted here by app.js.
 
-          <button class="empty-spot">?</button>
+            The frontend no longer assumes that Luna,
+            Mochi, or any specific furniture is unlocked.
+
+            The backend is the source of truth.
+          -->
+          <div
+            id="house-collectibles"
+            class="house-collectibles"
+          >
+
+            <p class="loading">
+              Your cozy corner is loading...
+            </p>
+
+          </div>
+
         </div>
+
       </section>
 
 
-      <!-- ==================== PROFILE VIEW ==================== -->
+      <!-- =========================================================
+           PROFILE VIEW
+      ========================================================== -->
       <section
         class="view page hidden profile-page"
         id="profile-view"
       >
-        <h2>Your profile</h2>
+
+        <h2>
+          Your profile
+        </h2>
+
 
         <div class="profile-card">
-          <span class="paw badge">●</span>
 
-          <h3>Quiet progress</h3>
+          <div class="profile-header">
+
+            <div class="profile-avatar">
+              🐾
+            </div>
+
+            <div>
+
+              <h3 id="profile-name">
+                QuietPaws user
+              </h3>
+
+              <p id="profile-email">
+                Loading...
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <h3>
+            Quiet progress
+          </h3>
+
 
           <p>
-            You have sat with yourself for three calm sessions.
+            Every quiet moment counts.
           </p>
 
-          <button class="primary" data-view="house">
+
+          <!-- Profile statistics -->
+          <div class="profile-stats">
+
+            <div class="profile-stat">
+
+              <strong id="profile-sessions">
+                0
+              </strong>
+
+              <span>
+                Sessions
+              </span>
+
+            </div>
+
+
+            <div class="profile-stat">
+
+              <strong id="profile-current-streak">
+                0
+              </strong>
+
+              <span>
+                Current streak
+              </span>
+
+            </div>
+
+
+            <div class="profile-stat">
+
+              <strong id="profile-best-streak">
+                0
+              </strong>
+
+              <span>
+                Best streak
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="primary"
+            data-view="house"
+          >
             See your house
           </button>
+
         </div>
+
       </section>
+
     </section>
 
 
-    <!-- ==================== REWARD / REVEAL VIEW ==================== -->
-    <section id="reveal-view" class="view reveal-view hidden">
-      <h2>A new friend!</h2>
+    <!-- =========================================================
+         REWARD / REVEAL VIEW
+    ========================================================== -->
+    <section
+      id="reveal-view"
+      class="view reveal-view hidden"
+    >
+
+      <!-- This changes between:
+           "A new friend!"
+           and
+           "Your house grew!"
+      -->
+      <h2 id="reward-title">
+        A new friend!
+      </h2>
+
 
       <div class="reveal-card">
+
         <img
           id="reward-image"
           src="assets/cats/cat3.jpeg"
-          alt="New cat friend"
+          alt="New QuietPaws reward"
         />
 
-        <h3 id="reward-name">Luna</h3>
+
+        <!-- Cat / furniture label -->
+        <span
+          class="reward-type"
+          id="reward-type"
+        >
+          New cat friend
+        </span>
+
+
+        <h3 id="reward-name">
+          Luna
+        </h3>
+
 
         <p id="reward-trait">
-          Naps in sunbeams, ignores everyone.
+          Complete a quiet session to unlock a reward.
         </p>
+
+
+        <blockquote id="reward-quote"></blockquote>
+
 
         <p>
-          You sat with it for
-          <span id="reward-minutes">5</span>
+
+          You sat with yourself for
+
+          <span id="reward-minutes">
+            5
+          </span>
+
           minutes.
+
         </p>
+
       </div>
 
+
       <div class="reveal-actions">
-        <button class="primary full" data-view="house">
+
+        <button
+          type="button"
+          class="primary full"
+          data-view="house"
+        >
           ⌂ &nbsp; See your house
         </button>
 
-        <button class="soft full" data-view="timer">
+
+        <button
+          type="button"
+          class="soft full"
+          data-view="timer"
+        >
           ⌛ &nbsp; Sit again
         </button>
+
       </div>
+
     </section>
 
 
-    <!-- ==================== CAT MODAL ==================== -->
-    <div id="cat-modal" class="modal hidden">
+    <!-- =========================================================
+         CAT MODAL
+    ========================================================== -->
+    <div
+      id="cat-modal"
+      class="modal hidden"
+    >
+
       <div class="modal-card">
-        <button class="close" data-close>×</button>
+
+        <button
+          type="button"
+          class="close"
+          data-close
+          aria-label="Close"
+        >
+          ×
+        </button>
+
 
         <div class="cat-portrait">
+
           <img
             id="modal-image"
             src="assets/cats/cat3.jpeg"
             alt="Cat portrait"
           />
+
         </div>
 
-        <h2 id="modal-name">Luna</h2>
 
-        <span class="found">Found today</span>
+        <h2 id="modal-name">
+          Luna
+        </h2>
 
-        <p class="trait" id="modal-trait">
-          ☀ &nbsp; Naps in sunbeams, ignores everyone
+
+        <span class="found">
+          Found
+        </span>
+
+
+        <p
+          class="trait"
+          id="modal-trait"
+        >
+          ☀ &nbsp; Your new quiet companion.
         </p>
 
-        <blockquote id="modal-quote">
-          “The sun is the best blanket.”
-        </blockquote>
 
-        <button class="primary full" data-close>
+        <blockquote id="modal-quote"></blockquote>
+
+
+        <button
+          type="button"
+          class="primary full"
+          data-close
+        >
           ⌂ &nbsp; Back to House
         </button>
+
       </div>
+
     </div>
 
 
-    <!-- ==================== SETTINGS MODAL ==================== -->
-    <div id="settings-modal" class="modal hidden">
-      <div class="modal-card settings">
-        <button class="close" data-close>×</button>
+    <!-- =========================================================
+         SETTINGS MODAL
+    ========================================================== -->
+    <div
+      id="settings-modal"
+      class="modal hidden"
+    >
 
-        <h2>Settings</h2>
+      <div class="modal-card settings">
+
+        <button
+          type="button"
+          class="close"
+          data-close
+          aria-label="Close settings"
+        >
+          ×
+        </button>
+
+
+        <h2>
+          Settings
+        </h2>
+
 
         <p>
           Everything here stays gentle and simple.
         </p>
 
-        <button class="soft full" id="reset-data">
-          Reset demo data
+
+        <button
+          type="button"
+          class="soft full"
+          id="reset-data"
+        >
+          Reset local session
         </button>
 
-        <button class="text-button full" id="logout">
+
+        <button
+          type="button"
+          class="text-button full"
+          id="logout"
+        >
           Log out
         </button>
+
       </div>
+
     </div>
 
   </main>
 
-  <script src="/js/app.js"></script>
+
+  <!-- JavaScript -->
+  <script src="./js/app.js"></script>
+
 </body>
 </html>
