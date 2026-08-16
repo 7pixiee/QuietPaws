@@ -1,7 +1,6 @@
 // ==================== CONFIG ====================
 
-const API_BASE = "http://localhost:3000/api";
-
+const API_BASE = "http://localhost:5000/api";
 
 // ==================== APP ELEMENTS ====================
 
@@ -21,13 +20,11 @@ const nameInput = document.querySelector("#name");
 
 const authSubmit = document.querySelector("#auth-submit");
 
-
 // ==================== AUTH STATE ====================
 
 let authMode = "login";
 let token = localStorage.getItem("quietpaws_token");
 let currentUser = null;
-
 
 // ==================== TIMER STATE ====================
 
@@ -37,7 +34,6 @@ let remaining = 300;
 
 let timerId = null;
 let running = false;
-
 
 // ==================== VIEW MANAGEMENT ====================
 
@@ -59,10 +55,7 @@ function showView(name) {
   targetView.classList.remove("hidden");
 
   navLinks.forEach((link) => {
-    link.classList.toggle(
-      "active",
-      link.dataset.view === name
-    );
+    link.classList.toggle("active", link.dataset.view === name);
   });
 
   if (name === "house") {
@@ -73,7 +66,6 @@ function showView(name) {
     loadProfile();
   }
 }
-
 
 // ==================== API HELPER ====================
 
@@ -106,23 +98,20 @@ async function apiRequest(endpoint, options = {}) {
         handleLogout();
       }
 
-      throw new Error(
-        data.error || "Something went wrong. Please try again."
-      );
+      throw new Error(data.error || "Something went wrong. Please try again.");
     }
 
     return data;
   } catch (error) {
     if (error.name === "TypeError") {
       throw new Error(
-        "Unable to connect to the server. Please make sure the backend is running."
+        "Unable to connect to the server. Please make sure the backend is running.",
       );
     }
 
     throw error;
   }
 }
-
 
 // ==================== AUTH STORAGE ====================
 
@@ -133,13 +122,9 @@ function saveAuth(data) {
   localStorage.setItem("quietpaws_token", token);
 
   if (currentUser) {
-    localStorage.setItem(
-      "quietpaws_user",
-      JSON.stringify(currentUser)
-    );
+    localStorage.setItem("quietpaws_user", JSON.stringify(currentUser));
   }
 }
-
 
 function clearAuth() {
   token = null;
@@ -148,7 +133,6 @@ function clearAuth() {
   localStorage.removeItem("quietpaws_token");
   localStorage.removeItem("quietpaws_user");
 }
-
 
 function loadSavedUser() {
   const savedUser = localStorage.getItem("quietpaws_user");
@@ -164,40 +148,29 @@ function loadSavedUser() {
   }
 }
 
-
 // ==================== AUTH MODE ====================
 
 function setAuthMode(mode) {
   authMode = mode;
 
   document.querySelectorAll(".tab").forEach((tab) => {
-    tab.classList.toggle(
-      "active",
-      tab.dataset.mode === mode
-    );
+    tab.classList.toggle("active", tab.dataset.mode === mode);
   });
 
   if (nameInput) {
-    nameInput.closest("label")?.classList.toggle(
-      "hidden",
-      mode !== "signup"
-    );
+    nameInput.closest("label")?.classList.toggle("hidden", mode !== "signup");
 
     nameInput.required = mode === "signup";
   }
 
   if (authSubmit) {
-    authSubmit.textContent =
-      mode === "login"
-        ? "Log In"
-        : "Create account";
+    authSubmit.textContent = mode === "login" ? "Log In" : "Create account";
   }
 
   if (authError) {
     authError.textContent = "";
   }
 }
-
 
 // ==================== AUTHENTICATION ====================
 
@@ -210,22 +183,18 @@ authForm.addEventListener("submit", async (event) => {
   const password = passwordInput.value;
 
   if (!email || !password) {
-    authError.textContent =
-      "Please enter your email and password.";
+    authError.textContent = "Please enter your email and password.";
     return;
   }
 
   if (authMode === "signup" && !nameInput.value.trim()) {
-    authError.textContent =
-      "Please enter your name.";
+    authError.textContent = "Please enter your name.";
     return;
   }
 
   authSubmit.disabled = true;
   authSubmit.textContent =
-    authMode === "login"
-      ? "Logging in..."
-      : "Creating account...";
+    authMode === "login" ? "Logging in..." : "Creating account...";
 
   try {
     let data;
@@ -261,19 +230,14 @@ authForm.addEventListener("submit", async (event) => {
     showView("timer");
 
     await loadProfile();
-
   } catch (error) {
     authError.textContent = error.message;
   } finally {
     authSubmit.disabled = false;
 
-    authSubmit.textContent =
-      authMode === "login"
-        ? "Log In"
-        : "Create account";
+    authSubmit.textContent = authMode === "login" ? "Log In" : "Create account";
   }
 });
-
 
 // Login / Signup tabs
 
@@ -283,7 +247,6 @@ document.querySelectorAll(".tab").forEach((tab) => {
   });
 });
 
-
 // ==================== NAVIGATION ====================
 
 document.querySelectorAll("[data-view]").forEach((button) => {
@@ -292,41 +255,27 @@ document.querySelectorAll("[data-view]").forEach((button) => {
   });
 });
 
-
 // ==================== TIMER ====================
 
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60);
 
-  const secondsLeft = String(
-    seconds % 60
-  ).padStart(2, "0");
+  const secondsLeft = String(seconds % 60).padStart(2, "0");
 
   return `${minutes}:${secondsLeft}`;
 }
 
-
 function updateTimer() {
-  const timeDisplay =
-    document.querySelector("#time-display");
+  const timeDisplay = document.querySelector("#time-display");
 
-  const timerRing =
-    document.querySelector("#timer-ring");
+  const timerRing = document.querySelector("#timer-ring");
 
-  timeDisplay.textContent =
-    formatTime(remaining);
+  timeDisplay.textContent = formatTime(remaining);
 
-  const progress =
-    totalSeconds > 0
-      ? (remaining / totalSeconds) * 100
-      : 100;
+  const progress = totalSeconds > 0 ? (remaining / totalSeconds) * 100 : 100;
 
-  timerRing.style.setProperty(
-    "--progress",
-    `${progress}%`
-  );
+  timerRing.style.setProperty("--progress", `${progress}%`);
 }
-
 
 // ==================== COMPLETE SESSION ====================
 
@@ -336,111 +285,82 @@ async function finishSession() {
   timerId = null;
   running = false;
 
-  const startButton =
-    document.querySelector("#start-timer");
+  const startButton = document.querySelector("#start-timer");
 
   startButton.textContent = "▶";
   startButton.disabled = true;
 
   try {
-    const intentionInput =
-      document.querySelector("#break-reason");
+    const intentionInput = document.querySelector("#break-reason");
 
-    const intention =
-      intentionInput?.value.trim() || "";
+    const intention = intentionInput?.value.trim() || "";
 
-    const data = await apiRequest(
-      "/sessions/complete",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          durationMin: selectedMinutes,
-          intention,
-        }),
-      }
-    );
+    const data = await apiRequest("/sessions/complete", {
+      method: "POST",
+      body: JSON.stringify({
+        durationMin: selectedMinutes,
+        intention,
+      }),
+    });
 
     showReward(data.reward, selectedMinutes);
 
     updateStreak(data.newStreak);
-
   } catch (error) {
     alert(error.message);
 
     remaining = totalSeconds;
     updateTimer();
-
   } finally {
     startButton.disabled = false;
   }
 }
 
-
 // ==================== REWARD DISPLAY ====================
 
 function showReward(reward, minutes) {
-  const rewardTitle =
-    document.querySelector("#reward-title");
+  const rewardTitle = document.querySelector("#reward-title");
 
-  const rewardImage =
-    document.querySelector("#reward-image");
+  const rewardImage = document.querySelector("#reward-image");
 
-  const rewardName =
-    document.querySelector("#reward-name");
+  const rewardName = document.querySelector("#reward-name");
 
-  const rewardTrait =
-    document.querySelector("#reward-trait");
+  const rewardTrait = document.querySelector("#reward-trait");
 
-  const rewardMinutes =
-    document.querySelector("#reward-minutes");
+  const rewardMinutes = document.querySelector("#reward-minutes");
 
-  const rewardType =
-    document.querySelector("#reward-type");
+  const rewardType = document.querySelector("#reward-type");
 
-  const rewardQuote =
-    document.querySelector("#reward-quote");
+  const rewardQuote = document.querySelector("#reward-quote");
 
   if (!reward) {
-    rewardTitle.textContent =
-      "Quiet time complete";
+    rewardTitle.textContent = "Quiet time complete";
 
     rewardImage.classList.add("hidden");
 
-    rewardName.textContent =
-      "You did it.";
+    rewardName.textContent = "You did it.";
 
-    rewardTrait.textContent =
-      "You gave yourself some peaceful time.";
+    rewardTrait.textContent = "You gave yourself some peaceful time.";
 
     rewardType.textContent = "";
 
     rewardQuote.textContent = "";
-
   } else {
     rewardImage.classList.remove("hidden");
 
-    rewardImage.src = getAssetUrl(
-      reward.image_url
-    );
+    rewardImage.src = getAssetUrl(reward.image_url);
 
-    rewardImage.alt =
-      reward.name || "QuietPaws reward";
+    rewardImage.alt = reward.name || "QuietPaws reward";
 
-    rewardName.textContent =
-      reward.name || "New reward";
+    rewardName.textContent = reward.name || "New reward";
 
-    rewardTrait.textContent =
-      reward.detail || "";
+    rewardTrait.textContent = reward.detail || "";
 
     rewardType.textContent =
-      reward.type === "cat"
-        ? "New cat friend"
-        : "New house item";
+      reward.type === "cat" ? "New cat friend" : "New house item";
 
     rewardTitle.textContent =
-      reward.type === "cat"
-        ? "A new friend!"
-        : "Your house grew!";
+      reward.type === "cat" ? "A new friend!" : "Your house grew!";
 
     rewardQuote.textContent = "";
   }
@@ -451,7 +371,6 @@ function showReward(reward, minutes) {
   revealView.classList.remove("hidden");
 }
 
-
 // ==================== IMAGE URL ====================
 
 function getAssetUrl(imageUrl) {
@@ -460,16 +379,12 @@ function getAssetUrl(imageUrl) {
   }
 
   // Already a complete URL
-  if (
-    imageUrl.startsWith("http://") ||
-    imageUrl.startsWith("https://")
-  ) {
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
     return imageUrl;
   }
 
   // Backend server origin
-  const backendOrigin =
-    API_BASE.replace(/\/api\/?$/, "");
+  const backendOrigin = API_BASE.replace(/\/api\/?$/, "");
 
   // Backend returned something like:
   // /assets/cats/luna.png
@@ -482,188 +397,130 @@ function getAssetUrl(imageUrl) {
   return `${backendOrigin}/${imageUrl}`;
 }
 
-
 // ==================== STREAK ====================
 
 function updateStreak(streak) {
-  const streakCount =
-    document.querySelector("#streak-count");
+  const streakCount = document.querySelector("#streak-count");
 
   if (!streakCount) {
     return;
   }
 
-  const dayText =
-    streak === 1
-      ? "Day"
-      : "Days";
+  const dayText = streak === 1 ? "Day" : "Days";
 
-  streakCount.textContent =
-    `${streak} ${dayText} Streak`;
+  streakCount.textContent = `${streak} ${dayText} Streak`;
 }
-
 
 // ==================== TIMER DURATION ====================
 
-document
-  .querySelectorAll(".durations button")
-  .forEach((button) => {
-
-    button.addEventListener("click", () => {
-
-      if (running) {
-        return;
-      }
-
-      selectedMinutes =
-        Number(button.dataset.minutes);
-
-      totalSeconds =
-        selectedMinutes * 60;
-
-      remaining =
-        totalSeconds;
-
-      document
-        .querySelectorAll(".durations button")
-        .forEach((item) => {
-          item.classList.toggle(
-            "selected",
-            item === button
-          );
-        });
-
-      updateTimer();
-    });
-  });
-
-
-// ==================== START / PAUSE TIMER ====================
-
-document
-  .querySelector("#start-timer")
-  .addEventListener("click", () => {
-
+document.querySelectorAll(".durations button").forEach((button) => {
+  button.addEventListener("click", () => {
     if (running) {
-      clearInterval(timerId);
-
-      timerId = null;
-      running = false;
-
-      document.querySelector(
-        "#start-timer"
-      ).textContent = "▶";
-
       return;
     }
 
-    if (remaining <= 0) {
-      remaining = totalSeconds;
-      updateTimer();
-    }
+    selectedMinutes = Number(button.dataset.minutes);
 
-    running = true;
+    totalSeconds = selectedMinutes * 60;
 
-    document.querySelector(
-      "#start-timer"
-    ).textContent = "Ⅱ";
+    remaining = totalSeconds;
 
-    timerId = setInterval(() => {
+    document.querySelectorAll(".durations button").forEach((item) => {
+      item.classList.toggle("selected", item === button);
+    });
 
-      remaining--;
-
-      updateTimer();
-
-      if (remaining <= 0) {
-        finishSession();
-      }
-
-    }, 1000);
+    updateTimer();
   });
+});
 
+// ==================== START / PAUSE TIMER ====================
+
+document.querySelector("#start-timer").addEventListener("click", () => {
+  if (running) {
+    clearInterval(timerId);
+
+    timerId = null;
+    running = false;
+
+    document.querySelector("#start-timer").textContent = "▶";
+
+    return;
+  }
+
+  if (remaining <= 0) {
+    remaining = totalSeconds;
+    updateTimer();
+  }
+
+  running = true;
+
+  document.querySelector("#start-timer").textContent = "Ⅱ";
+
+  timerId = setInterval(() => {
+    remaining--;
+
+    updateTimer();
+
+    if (remaining <= 0) {
+      finishSession();
+    }
+  }, 1000);
+});
 
 // ==================== RESET TIMER ====================
 
-document
-  .querySelector("#reset-timer")
-  .addEventListener("click", () => {
+document.querySelector("#reset-timer").addEventListener("click", () => {
+  clearInterval(timerId);
 
-    clearInterval(timerId);
+  timerId = null;
+  running = false;
 
-    timerId = null;
-    running = false;
+  remaining = totalSeconds;
 
-    remaining = totalSeconds;
+  updateTimer();
 
-    updateTimer();
-
-    document.querySelector(
-      "#start-timer"
-    ).textContent = "▶";
-  });
-
+  document.querySelector("#start-timer").textContent = "▶";
+});
 
 // ==================== STOP TIMER ====================
 
-document
-  .querySelector("#stop-timer")
-  .addEventListener("click", () => {
+document.querySelector("#stop-timer").addEventListener("click", () => {
+  clearInterval(timerId);
 
-    clearInterval(timerId);
+  timerId = null;
+  running = false;
 
-    timerId = null;
-    running = false;
+  remaining = totalSeconds;
 
-    remaining = totalSeconds;
+  updateTimer();
 
-    updateTimer();
-
-    document.querySelector(
-      "#start-timer"
-    ).textContent = "▶";
-  });
-
+  document.querySelector("#start-timer").textContent = "▶";
+});
 
 // ==================== HOUSE / REWARDS ====================
 
 async function loadRewards() {
-  const collectiblesContainer =
-    document.querySelector("#house-collectibles");
+  const collectiblesContainer = document.querySelector("#house-collectibles");
 
   if (!collectiblesContainer) {
     return;
   }
 
-  collectiblesContainer.innerHTML =
-    `<p class="loading">Loading your collection...</p>`;
+  collectiblesContainer.innerHTML = `<p class="loading">Loading your collection...</p>`;
 
   try {
-    const data =
-      await apiRequest("/user/rewards");
+    const data = await apiRequest("/user/rewards");
 
-    const cats =
-      Array.isArray(data.cats)
-        ? data.cats
-        : [];
+    const cats = Array.isArray(data.cats) ? data.cats : [];
 
-    const pieces =
-      Array.isArray(data.pieces)
-        ? data.pieces
-        : [];
+    const pieces = Array.isArray(data.pieces) ? data.pieces : [];
 
-    updateHouseCounts(
-      cats,
-      pieces
-    );
+    updateHouseCounts(cats, pieces);
 
     collectiblesContainer.innerHTML = "";
 
-    if (
-      cats.length === 0 &&
-      pieces.length === 0
-    ) {
-      collectiblesContainer.innerHTML =
-        `<p class="empty-collection">
+    if (cats.length === 0 && pieces.length === 0) {
+      collectiblesContainer.innerHTML = `<p class="empty-collection">
           Complete a quiet session to unlock your first reward.
         </p>`;
 
@@ -675,12 +532,9 @@ async function loadRewards() {
         return;
       }
 
-      const button =
-        createCatElement(cat);
+      const button = createCatElement(cat);
 
-      collectiblesContainer.appendChild(
-        button
-      );
+      collectiblesContainer.appendChild(button);
     });
 
     pieces.forEach((piece) => {
@@ -688,120 +542,80 @@ async function loadRewards() {
         return;
       }
 
-      const element =
-        createFurnitureElement(piece);
+      const element = createFurnitureElement(piece);
 
-      collectiblesContainer.appendChild(
-        element
-      );
+      collectiblesContainer.appendChild(element);
     });
-
   } catch (error) {
-    collectiblesContainer.innerHTML =
-      `<p class="error">
+    collectiblesContainer.innerHTML = `<p class="error">
         ${escapeHtml(error.message)}
       </p>`;
   }
 }
 
-
 function updateHouseCounts(cats, pieces) {
-  const catsFound =
-    document.querySelector("#cats-found");
+  const unlockedCats = cats.filter((cat) => cat.unlocked);
+  const unlockedPieces = pieces.filter((piece) => piece.unlocked);
 
-  const piecesFound =
-    document.querySelector("#pieces-found");
+  const catsFound = document.querySelector("#cats-found");
+  const piecesFound = document.querySelector("#pieces-found");
 
-  if (catsFound) {
-    catsFound.textContent =
-      cats.length;
-  }
+  if (catsFound) catsFound.textContent = unlockedCats.length;
+  if (piecesFound) piecesFound.textContent = unlockedPieces.length;
 
-  if (piecesFound) {
-    piecesFound.textContent =
-      pieces.length;
-  }
-
-  const progressFill =
-    document.querySelector("#progress-fill");
+  const progressFill = document.querySelector("#progress-fill");
 
   if (progressFill) {
-    const total =
-      cats.length + pieces.length;
-
-    const progress =
-      Math.min(
-        (total / 24) * 100,
-        100
-      );
-
-    progressFill.style.width =
-      `${progress}%`;
+    const total = unlockedCats.length + unlockedPieces.length;
+    const progress = Math.min((total / 24) * 100, 100);
+    progressFill.style.width = `${progress}%`;
   }
 }
-
 
 // ==================== CREATE CAT ====================
 
 function createCatElement(cat) {
-  const button =
-    document.createElement("button");
+  const button = document.createElement("button");
 
   button.className = "cat-at-home";
 
-  button.dataset.catId =
-    cat.id;
+  button.dataset.catId = cat.id;
 
-  button.dataset.catName =
-    cat.name;
+  button.dataset.catName = cat.name;
 
   button.type = "button";
 
-  const image =
-    document.createElement("img");
+  const image = document.createElement("img");
 
-  image.src =
-    getAssetUrl(cat.image_url);
+  image.src = getAssetUrl(cat.image_url);
 
-  image.alt =
-    cat.name || "Cat";
+  image.alt = cat.name || "Cat";
 
   button.appendChild(image);
 
-  button.addEventListener(
-    "click",
-    () => {
-      openCatModal(cat);
-    }
-  );
+  button.addEventListener("click", () => {
+    openCatModal(cat);
+  });
 
   return button;
 }
 
-
 // ==================== CREATE FURNITURE ====================
 
 function createFurnitureElement(piece) {
-  const element =
-    document.createElement("div");
+  const element = document.createElement("div");
 
-  element.className =
-    "furniture-at-home";
+  element.className = "furniture-at-home";
 
-  const image =
-    document.createElement("img");
+  const image = document.createElement("img");
 
-  image.src =
-    getAssetUrl(piece.image_url);
+  image.src = getAssetUrl(piece.image_url);
 
-  image.alt =
-    piece.name || "Furniture";
+  image.alt = piece.name || "Furniture";
 
-  const name =
-    document.createElement("span");
+  const name = document.createElement("span");
 
-  name.textContent =
-    piece.name || "Furniture";
+  name.textContent = piece.name || "Furniture";
 
   element.appendChild(image);
   element.appendChild(name);
@@ -809,201 +623,141 @@ function createFurnitureElement(piece) {
   return element;
 }
 
-
 // ==================== CAT MODAL ====================
 
 function openCatModal(cat) {
-  const modal =
-    document.querySelector("#cat-modal");
+  const modal = document.querySelector("#cat-modal");
 
-  const image =
-    document.querySelector("#modal-image");
+  const image = document.querySelector("#modal-image");
 
-  const name =
-    document.querySelector("#modal-name");
+  const name = document.querySelector("#modal-name");
 
-  const trait =
-    document.querySelector("#modal-trait");
+  const trait = document.querySelector("#modal-trait");
 
-  const quote =
-    document.querySelector("#modal-quote");
+  const quote = document.querySelector("#modal-quote");
 
-  image.src =
-    getAssetUrl(cat.image_url);
+  image.src = getAssetUrl(cat.image_url);
 
-  image.alt =
-    cat.name || "Cat portrait";
+  image.alt = cat.name || "Cat portrait";
 
-  name.textContent =
-    cat.name || "Cat";
+  name.textContent = cat.name || "Cat";
 
-  trait.textContent =
-    `☀  ${cat.detail || ""}`;
+  trait.textContent = `☀  ${cat.detail || ""}`;
 
-  quote.textContent =
-    cat.quote || "";
+  quote.textContent = cat.quote || "";
 
   modal.classList.remove("hidden");
 }
-
 
 // ==================== PROFILE ====================
 
 async function loadProfile() {
   try {
-    const data =
-      await apiRequest("/user/profile");
+    const data = await apiRequest("/user/profile");
 
-    const user =
-      data.user || data;
+    const user = data.user || data;
 
     currentUser = user;
 
-    localStorage.setItem(
-      "quietpaws_user",
-      JSON.stringify(user)
+    localStorage.setItem("quietpaws_user", JSON.stringify(user));
+
+    const profileName = document.querySelector("#profile-name");
+
+    const profileEmail = document.querySelector("#profile-email");
+
+    const profileSessions = document.querySelector("#profile-sessions");
+
+    const profileCurrentStreak = document.querySelector(
+      "#profile-current-streak",
     );
 
-    const profileName =
-      document.querySelector("#profile-name");
-
-    const profileEmail =
-      document.querySelector("#profile-email");
-
-    const profileSessions =
-      document.querySelector("#profile-sessions");
-
-    const profileCurrentStreak =
-      document.querySelector(
-        "#profile-current-streak"
-      );
-
-    const profileBestStreak =
-      document.querySelector(
-        "#profile-best-streak"
-      );
+    const profileBestStreak = document.querySelector("#profile-best-streak");
 
     if (profileName) {
-      profileName.textContent =
-        user.name || "QuietPaws user";
+      profileName.textContent = user.name || "QuietPaws user";
     }
 
     if (profileEmail) {
-      profileEmail.textContent =
-        user.email || "";
+      profileEmail.textContent = user.email || "";
     }
 
     if (profileSessions) {
-      profileSessions.textContent =
-        user.completed_sessions ?? 0;
+      profileSessions.textContent = user.totalSessions ?? 0;
     }
 
     if (profileCurrentStreak) {
-      profileCurrentStreak.textContent =
-        user.current_streak ?? 0;
+      profileCurrentStreak.textContent = user.streak?.current ?? 0;
     }
 
     if (profileBestStreak) {
-      profileBestStreak.textContent =
-        user.best_streak ?? 0;
+      profileBestStreak.textContent = user.streak?.best ?? 0;
     }
 
-    updateStreak(
-      user.current_streak ?? 0
-    );
-
+    updateStreak(user.streak?.current ?? 0);
   } catch (error) {
-    console.error(
-      "Could not load profile:",
-      error
-    );
+    console.error("Could not load profile:", error);
   }
 }
 
-
 // ==================== SETTINGS ====================
 
-document
-  .querySelector("#settings-button")
-  .addEventListener("click", () => {
-
-    document
-      .querySelector("#settings-modal")
-      .classList.remove("hidden");
-  });
-
+document.querySelector("#settings-button").addEventListener("click", () => {
+  document.querySelector("#settings-modal").classList.remove("hidden");
+});
 
 // ==================== CLOSE MODALS ====================
 
-document
-  .querySelectorAll("[data-close]")
-  .forEach((button) => {
+document.querySelectorAll("[data-close]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const modal = button.closest(".modal");
 
-    button.addEventListener("click", () => {
-
-      const modal =
-        button.closest(".modal");
-
-      if (modal) {
-        modal.classList.add("hidden");
-      }
-    });
+    if (modal) {
+      modal.classList.add("hidden");
+    }
   });
-
+});
 
 // Close modal when clicking outside
 
-document
-  .querySelectorAll(".modal")
-  .forEach((modal) => {
-
-    modal.addEventListener("click", (event) => {
-
-      if (event.target === modal) {
-        modal.classList.add("hidden");
-      }
-    });
+document.querySelectorAll(".modal").forEach((modal) => {
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.classList.add("hidden");
+    }
   });
-
+});
 
 // ==================== RESET DATA ====================
 
-document
-  .querySelector("#reset-data")
-  .addEventListener("click", async () => {
+document.querySelector("#reset-data").addEventListener("click", async () => {
+  const confirmed = window.confirm(
+    "Reset demo data? This will clear your local login session.",
+  );
 
-    const confirmed =
-      window.confirm(
-        "Reset demo data? This will clear your local login session."
-      );
+  if (!confirmed) {
+    return;
+  }
 
-    if (!confirmed) {
-      return;
-    }
+  clearAuth();
 
-    clearAuth();
+  clearInterval(timerId);
 
-    clearInterval(timerId);
+  timerId = null;
+  running = false;
 
-    timerId = null;
-    running = false;
+  remaining = totalSeconds;
 
-    remaining = totalSeconds;
+  updateTimer();
 
-    updateTimer();
+  document.querySelector("#settings-modal").classList.add("hidden");
 
-    document
-      .querySelector("#settings-modal")
-      .classList.add("hidden");
+  appView.classList.add("hidden");
+  revealView.classList.add("hidden");
 
-    appView.classList.add("hidden");
-    revealView.classList.add("hidden");
+  authView.classList.remove("hidden");
 
-    authView.classList.remove("hidden");
-
-    setAuthMode("login");
-  });
-
+  setAuthMode("login");
+});
 
 // ==================== LOG OUT ====================
 
@@ -1023,31 +777,21 @@ function handleLogout() {
   setAuthMode("login");
 }
 
+document.querySelector("#logout").addEventListener("click", () => {
+  document.querySelector("#settings-modal").classList.add("hidden");
 
-document
-  .querySelector("#logout")
-  .addEventListener("click", () => {
-
-    document
-      .querySelector("#settings-modal")
-      .classList.add("hidden");
-
-    handleLogout();
-  });
-
+  handleLogout();
+});
 
 // ==================== HTML ESCAPE ====================
 
 function escapeHtml(value) {
-  const div =
-    document.createElement("div");
+  const div = document.createElement("div");
 
-  div.textContent =
-    String(value ?? "");
+  div.textContent = String(value ?? "");
 
   return div.innerHTML;
 }
-
 
 // ==================== INITIALIZATION ====================
 
@@ -1056,7 +800,6 @@ loadSavedUser();
 setAuthMode("login");
 
 updateTimer();
-
 
 // If a saved token exists,
 // try opening the application.
