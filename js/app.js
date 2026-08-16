@@ -841,5 +841,3 @@ if (token) {
     handleLogout();
   });
 }
-
-

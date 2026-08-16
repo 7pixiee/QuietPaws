@@ -9,7 +9,7 @@
   --line: #c5ebc3;
   --aqua: #9ce8df;
   --mint: #cdeec8;
-  --paper: #fbfefd;
+
 }
 
 * {
@@ -1047,10 +1047,6 @@ nav {
 
   .brand {
     font-size: 1.35rem;
-  }
-
-  .brand .paw {
-    display: none;
   }
 
   nav {

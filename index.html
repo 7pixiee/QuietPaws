@@ -1,159 +1,184 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuietPaws</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuietPaws</title>
-
-  <link rel="stylesheet" href="./css/style.css" />
-</head>
-
-<body>
-  <main id="app">
-    <!-- =========================================================
+  <body>
+    <main id="app">
+      <!-- =========================================================
          AUTH VIEW
     ========================================================== -->
-    <section id="auth-view" class="view auth-view">
-      <div class="auth-brand">
-        <span class="paw">🐾</span>
+      <section id="auth-view" class="view auth-view">
+        <div class="auth-brand">
+          <span class="paw">🐾</span>
 
-        <h1>QuietPaws</h1>
+          <h1>QuietPaws</h1>
 
-        <p>A quiet space for your mind to relax.</p>
-      </div>
-
-      <form class="auth-card" id="auth-form">
-        <!-- Login / Signup tabs -->
-        <div class="tabs">
-          <button type="button" class="tab active" data-mode="login">
-            Log in
-          </button>
-
-          <button type="button" class="tab" data-mode="signup">
-            Sign up
-          </button>
+          <p>A quiet space for your mind to relax.</p>
         </div>
 
-        <!-- Name - signup only -->
-        <label class="hidden">
-          Name
+        <form class="auth-card" id="auth-form">
+          <!-- Login / Signup tabs -->
+          <div class="tabs">
+            <button type="button" class="tab active" data-mode="login">
+              Log in
+            </button>
 
-          <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" />
-        </label>
+            <button type="button" class="tab" data-mode="signup">
+              Sign up
+            </button>
+          </div>
 
-        <!-- Email -->
-        <label>
-          Email
+          <!-- Name - signup only -->
+          <label class="hidden">
+            Name
 
-          <input id="email" name="email" required type="email" placeholder="you@example.com" autocomplete="email" />
-        </label>
-
-        <!-- Password -->
-        <label>
-          Password
-
-          <input id="password" name="password" required type="password" placeholder="••••••••"
-            autocomplete="current-password" />
-        </label>
-
-        <!-- Login options -->
-        <div class="form-row">
-          <label class="check">
-            <input id="stay-logged-in" type="checkbox" />
-
-            <span> Stay logged in </span>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Your name"
+              autocomplete="name"
+            />
           </label>
 
-          <button type="button" class="text-button">Forgot password?</button>
-        </div>
+          <!-- Email -->
+          <label>
+            Email
 
-        <!-- Auth error -->
-        <p class="error" id="auth-error" aria-live="polite"></p>
+            <input
+              id="email"
+              name="email"
+              required
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+          </label>
 
-        <!-- Submit -->
-        <button class="primary full" id="auth-submit" type="submit">
-          Log In
-        </button>
-      </form>
-    </section>
+          <!-- Password -->
+          <label>
+            Password
 
-    <!-- =========================================================
-         MAIN APPLICATION
-    ========================================================== -->
-    <section id="app-view" class="hidden">
-      <!-- ==================== HEADER ==================== -->
-      <header>
-        <button class="brand" type="button" data-view="timer">
-          QuietPaws
-        </button>
+            <input
+              id="password"
+              name="password"
+              required
+              type="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+          </label>
 
-        <nav>
-          <button type="button" data-view="timer" class="nav-link active">
-            Timer
+          <!-- Login options -->
+          <div class="form-row">
+            <label class="check">
+              <input id="stay-logged-in" type="checkbox" />
+
+              <span> Stay logged in </span>
+            </label>
+
+            <button type="button" class="text-button">Forgot password?</button>
+          </div>
+
+          <!-- Auth error -->
+          <p class="error" id="auth-error" aria-live="polite"></p>
+
+          <!-- Submit -->
+          <button class="primary full" id="auth-submit" type="submit">
+            Log In
           </button>
-
-          <button type="button" data-view="house" class="nav-link">
-            House
-          </button>
-
-          <button type="button" data-view="profile" class="nav-link">
-            Profile
-          </button>
-        </nav>
-
-        <button type="button" class="icon-button" id="settings-button" title="Settings" aria-label="Open settings">
-          ⚙
-        </button>
-      </header>
+        </form>
+      </section>
 
       <!-- =========================================================
+         MAIN APPLICATION
+    ========================================================== -->
+      <section id="app-view" class="hidden">
+        <!-- ==================== HEADER ==================== -->
+        <header>
+          <button class="brand" type="button" data-view="timer">
+            QuietPaws
+          </button>
+
+          <nav>
+            <button type="button" data-view="timer" class="nav-link active">
+              Timer
+            </button>
+
+            <button type="button" data-view="house" class="nav-link">
+              House
+            </button>
+
+            <button type="button" data-view="profile" class="nav-link">
+              Profile
+            </button>
+          </nav>
+
+          <button
+            type="button"
+            class="icon-button"
+            id="settings-button"
+            title="Settings"
+            aria-label="Open settings"
+          >
+            ⚙
+          </button>
+        </header>
+
+        <!-- =========================================================
            TIMER VIEW
       ========================================================== -->
-      <section class="view page" id="timer-view">
-        <!-- ==================== STREAK ==================== -->
-        <div class="streak">
-          ♨
+        <section class="view page" id="timer-view">
+          <!-- ==================== STREAK ==================== -->
+          <div class="streak">
+            ♨
 
-          <span>
-            <strong id="streak-count"> 0 Day Streak </strong>
+            <span>
+              <strong id="streak-count"> 0 Day Streak </strong>
 
-            <small> Nothing is ever lost. </small>
-          </span>
+              <small> Nothing is ever lost. </small>
+            </span>
 
-          <span class="trophy">
-            ♕ <strong id="best-streak-count">0</strong>
-          </span>
-        </div>
-        <div class="timer-wrap">
-          <!-- Timer -->
-          <div class="timer-ring" id="timer-ring">
-            <div class="timer-inner">
-              <span class="big-paw">
-                <img src="./assets/cat-paw.png" alt="cat-paw" />
-              </span>
+            <span class="trophy">
+              ♕ <strong id="best-streak-count">0</strong>
+            </span>
+          </div>
+          <div class="timer-wrap">
+            <!-- Timer -->
+            <div class="timer-ring" id="timer-ring">
+              <div class="timer-inner">
+                <span class="big-paw">
+                  <img src="./assets/cat-paw.png" alt="cat-paw" />
+                </span>
 
-              <!-- <strong id="time-display"> 5:00 </strong>
+                <!-- <strong id="time-display"> 5:00 </strong>
 
                 <small> quiet time </small> -->
+              </div>
             </div>
-          </div>
 
-          <!-- Duration buttons -->
-          <!-- Duration buttons (shown when not running) -->
-          <div id="timer-setup">
-            <div class="durations">
-              <button type="button" data-minutes="2">2 min</button>
-              <button type="button" data-minutes="5" class="selected">
-                5 min
-              </button>
-              <button type="button" data-minutes="10">10 min</button>
+            <!-- Duration buttons -->
+            <!-- Duration buttons (shown when not running) -->
+            <div id="timer-setup">
+              <div class="durations">
+                <button type="button" data-minutes="2">2 min</button>
+                <button type="button" data-minutes="5" class="selected">
+                  5 min
+                </button>
+                <button type="button" data-minutes="10">10 min</button>
+              </div>
             </div>
-          </div>
 
-          <!-- Countdown text (shown only when running) -->
-          <strong id="time-display" class="running-countdown hidden">5:00</strong>
-          <!-- <div class="durations">
+            <!-- Countdown text (shown only when running) -->
+            <strong id="time-display" class="running-countdown hidden"
+              >5:00</strong
+            >
+            <!-- <div class="durations">
               <button type="button" data-minutes="2">2 min</button>
 
               <button type="button" data-minutes="5" class="selected">
@@ -163,326 +188,443 @@
               <button type="button" data-minutes="10">10 min</button>
             </div> -->
 
-          <!-- Timer controls -->
-          <div class="controls">
-            <button type="button" class="round secondary" id="reset-timer" aria-label="Reset timer">
-              ↻
-            </button>
+            <!-- Timer controls -->
+            <div class="controls">
+              <button
+                type="button"
+                class="round secondary"
+                id="reset-timer"
+                aria-label="Reset timer"
+              >
+                ↻
+              </button>
 
-            <button type="button" class="round play" id="start-timer" aria-label="Start timer">
-              ▶
-            </button>
+              <button
+                type="button"
+                class="round play"
+                id="start-timer"
+                aria-label="Start timer"
+              >
+                ▶
+              </button>
 
-            <button type="button" class="round secondary" id="stop-timer" aria-label="Stop timer">
-              ■
-            </button>
+              <button
+                type="button"
+                class="round secondary"
+                id="stop-timer"
+                aria-label="Stop timer"
+              >
+                ■
+              </button>
+            </div>
+
+            <!-- Reason for break -->
+            <div class="break-reason">
+              <label for="break-reason"> Why are you taking this break? </label>
+
+              <textarea
+                id="break-reason"
+                name="intention"
+                rows="3"
+                maxlength="500"
+                placeholder="I need a quiet moment because..."
+              ></textarea>
+            </div>
+
+            <p class="caption">No sound will play.</p>
           </div>
+        </section>
 
-          <!-- Reason for break -->
-          <div class="break-reason">
-            <label for="break-reason"> Why are you taking this break? </label>
-
-            <textarea id="break-reason" name="intention" rows="3" maxlength="500"
-              placeholder="I need a quiet moment because..."></textarea>
-          </div>
-
-          <p class="caption">No sound will play.</p>
-        </div>
-      </section>
-
-      <!-- =========================================================
+        <!-- =========================================================
            HOUSE VIEW
       ========================================================== -->
-      <section class="view page hidden" id="house-view">
-        <div class="house-heading">
-          <h2>Your Cozy Corner</h2>
+        <section class="view page hidden" id="house-view">
+          <div class="house-heading">
+            <h2>Your Cozy Corner</h2>
 
-          <p>
-            <span id="cats-found"> 0 </span>
-            of 7 cats found ·
-            <span id="pieces-found"> 0 </span>
-            of 5 pieces placed
-          </p>
+            <p>
+              <span id="cats-found"> 0 </span>
+              of 7 cats found ·
+              <span id="pieces-found"> 0 </span>
+              of 5 pieces placed
+            </p>
 
-          <div class="progress">
-            <i id="progress-fill"></i>
+            <div class="progress">
+              <i id="progress-fill"></i>
+            </div>
           </div>
-        </div>
 
-        <!-- House -->
-        <div class="room-switcher" id="room-switcher">
-          <button type="button" class="room-tile active" data-room="main-home">
-            <img src="./assets/home/main.png" alt="Your House room" />
-            <span>Your House</span>
-          </button>
+          <!-- House -->
+          <div class="room-switcher" id="room-switcher">
+            <button
+              type="button"
+              class="room-tile active"
+              data-room="main-home"
+            >
+              <img src="./assets/home/main.png" alt="Your House room" />
+              <span>Your House</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-1">
-            <img src="./assets/home/Home-1.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
+            <button type="button" class="room-tile locked" data-room="home-1">
+              <img src="./assets/home/Home-1.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-2">
-            <img src="./assets/home/Home-2.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
+            <button type="button" class="room-tile locked" data-room="home-2">
+              <img src="./assets/home/Home-2.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-3">
-            <img src="./assets/home/Home-3.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
+            <button type="button" class="room-tile locked" data-room="home-3">
+              <img src="./assets/home/Home-3.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-4">
-            <img src="./assets/home/Home-4.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
+            <button type="button" class="room-tile locked" data-room="home-4">
+              <img src="./assets/home/Home-4.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-5">
-            <img src="./assets/home/Home-5.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
+            <button type="button" class="room-tile locked" data-room="home-5">
+              <img src="./assets/home/Home-5.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
 
-          <button type="button" class="room-tile locked" data-room="home-6">
-            <img src="./assets/home/Home-6.png" alt="Locked room" />
-            <div class="lock">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                  <rect x="5" y="11" width="14" height="10" rx="2" fill="#2d6d64" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#2d6d64" stroke-width="2.2" fill="none" />
-                  <circle cx="12" cy="16" r="1.6" fill="#fff" />
-                </svg>
-              </span>
-            </div>
-            <span>Coming soon</span>
-          </button>
-        </div>
-        <div class="room">
-          <img src="./assets/home/main-home/Room.png" alt="" class="room-bg room-layer" />
-
-          <div id="house-collectibles" class="house-collectibles">
-            <p class="loading">Your cozy corner is loading...</p>
+            <button type="button" class="room-tile locked" data-room="home-6">
+              <img src="./assets/home/Home-6.png" alt="Locked room" />
+              <div class="lock">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="10"
+                      rx="2"
+                      fill="#2d6d64"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#2d6d64"
+                      stroke-width="2.2"
+                      fill="none"
+                    />
+                    <circle cx="12" cy="16" r="1.6" fill="#fff" />
+                  </svg>
+                </span>
+              </div>
+              <span>Coming soon</span>
+            </button>
           </div>
-        </div>
+          <div class="room">
+            <img
+              src="./assets/home/main-home/Room.png"
+              alt=""
+              class="room-bg room-layer"
+            />
+
+            <div id="house-collectibles" class="house-collectibles">
+              <p class="loading">Your cozy corner is loading...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+           PROFILE VIEW
+      ========================================================== -->
+        <section class="view page hidden profile-page" id="profile-view">
+          <h2>Your profile</h2>
+
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <img src="./assets/cat-paw.png" alt="cat-paw" />
+              </div>
+
+              <div>
+                <h3 id="profile-name">QuietPaws user</h3>
+
+                <p id="profile-email">Loading...</p>
+              </div>
+            </div>
+
+            <h3>Quiet progress</h3>
+
+            <p>Every quiet moment counts.</p>
+
+            <!-- Profile statistics -->
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <strong id="profile-sessions"> 0 </strong>
+
+                <span> Sessions </span>
+              </div>
+
+              <div class="profile-stat">
+                <strong id="profile-current-streak"> 0 </strong>
+
+                <span> Current streak </span>
+              </div>
+
+              <div class="profile-stat">
+                <strong id="profile-best-streak"> 0 </strong>
+
+                <span> Best streak </span>
+              </div>
+            </div>
+
+            <button type="button" class="primary" data-view="house">
+              See your house
+            </button>
+          </div>
+        </section>
       </section>
 
       <!-- =========================================================
-           PROFILE VIEW
-      ========================================================== -->
-      <section class="view page hidden profile-page" id="profile-view">
-        <h2>Your profile</h2>
-
-        <div class="profile-card">
-          <div class="profile-header">
-            <div class="profile-avatar">
-              <img src="./assets/cat-paw.png" alt="cat-paw" />
-            </div>
-
-            <div>
-              <h3 id="profile-name">QuietPaws user</h3>
-
-              <p id="profile-email">Loading...</p>
-            </div>
-          </div>
-
-          <h3>Quiet progress</h3>
-
-          <p>Every quiet moment counts.</p>
-
-          <!-- Profile statistics -->
-          <div class="profile-stats">
-            <div class="profile-stat">
-              <strong id="profile-sessions"> 0 </strong>
-
-              <span> Sessions </span>
-            </div>
-
-            <div class="profile-stat">
-              <strong id="profile-current-streak"> 0 </strong>
-
-              <span> Current streak </span>
-            </div>
-
-            <div class="profile-stat">
-              <strong id="profile-best-streak"> 0 </strong>
-
-              <span> Best streak </span>
-            </div>
-          </div>
-
-          <button type="button" class="primary" data-view="house">
-            See your house
-          </button>
-        </div>
-      </section>
-    </section>
-
-    <!-- =========================================================
          REWARD / REVEAL VIEW
     ========================================================== -->
-    <section id="reveal-view" class="view reveal-view hidden">
-      <button type="button" class="close" id="close-reveal" aria-label="Close">
-        ×
-      </button>
+      <section id="reveal-view" class="view reveal-view hidden">
+        <button
+          type="button"
+          class="close"
+          id="close-reveal"
+          aria-label="Close"
+        >
+          ×
+        </button>
 
-      <!-- This changes between:
+        <!-- This changes between:
            "A new friend!"
            and
            "Your house grew!"
       -->
-      <h2 id="reward-title">A new friend!</h2>
+        <h2 id="reward-title">A new friend!</h2>
 
-      <div class="reveal-card">
-        <img id="reward-image" src="./assets/cats/Luna.png" alt="New QuietPaws reward" />
+        <div class="reveal-card">
+          <img
+            id="reward-image"
+            src="./assets/cats/Luna.png"
+            alt="New QuietPaws reward"
+          />
 
-        <!-- Cat / furniture label -->
-        <span class="reward-type" id="reward-type"> New cat friend </span>
+          <!-- Cat / furniture label -->
+          <span class="reward-type" id="reward-type"> New cat friend </span>
 
-        <h3 id="reward-name">Luna</h3>
+          <h3 id="reward-name">Luna</h3>
 
-        <p id="reward-trait">Complete a quiet session to unlock a reward.</p>
+          <p id="reward-trait">Complete a quiet session to unlock a reward.</p>
 
-        <blockquote id="reward-quote"></blockquote>
+          <blockquote id="reward-quote"></blockquote>
 
-        <p>
-          You sat with yourself for
+          <p>
+            You sat with yourself for
 
-          <span id="reward-minutes"> 5 </span>
+            <span id="reward-minutes"> 5 </span>
 
-          minutes.
-        </p>
-      </div>
-
-      <div class="reveal-actions">
-        <button type="button" class="primary full" data-view="house">
-          ⌂ &nbsp; See your house
-        </button>
-
-        <button type="button" class="soft full" data-view="timer">
-          ⌛ &nbsp; Sit again
-        </button>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         CAT MODAL
-    ========================================================== -->
-    <div id="cat-modal" class="modal hidden">
-      <div class="modal-card">
-        <button type="button" class="close" data-close aria-label="Close">
-          ×
-        </button>
-
-        <div class="cat-portrait">
-          <img id="modal-image" src="./assets/cats/Luna.png" alt="Cat portrait" />
+            minutes.
+          </p>
         </div>
 
-        <h2 id="modal-name">Luna</h2>
+        <div class="reveal-actions">
+          <button type="button" class="primary full" data-view="house">
+            ⌂ &nbsp; See your house
+          </button>
 
-        <span class="found"> Found </span>
+          <button type="button" class="soft full" data-view="timer">
+            ⌛ &nbsp; Sit again
+          </button>
+        </div>
+      </section>
 
-        <p class="trait" id="modal-trait">
-          ☀ &nbsp; Your new quiet companion.
-        </p>
+      <!-- =========================================================
+         CAT MODAL
+    ========================================================== -->
+      <div id="cat-modal" class="modal hidden">
+        <div class="modal-card">
+          <button type="button" class="close" data-close aria-label="Close">
+            ×
+          </button>
 
-        <blockquote id="modal-quote"></blockquote>
+          <div class="cat-portrait">
+            <img
+              id="modal-image"
+              src="./assets/cats/Luna.png"
+              alt="Cat portrait"
+            />
+          </div>
 
-        <button type="button" class="primary full" data-close>
-          ⌂ &nbsp; Back to House
-        </button>
+          <h2 id="modal-name">Luna</h2>
+
+          <span class="found"> Found </span>
+
+          <p class="trait" id="modal-trait">
+            ☀ &nbsp; Your new quiet companion.
+          </p>
+
+          <blockquote id="modal-quote"></blockquote>
+
+          <button type="button" class="primary full" data-close>
+            ⌂ &nbsp; Back to House
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- =========================================================
+      <!-- =========================================================
          SETTINGS MODAL
     ========================================================== -->
-    <div id="settings-modal" class="modal hidden">
-      <div class="modal-card settings">
-        <button type="button" class="close" data-close aria-label="Close settings">
-          ×
-        </button>
+      <div id="settings-modal" class="modal hidden">
+        <div class="modal-card settings">
+          <button
+            type="button"
+            class="close"
+            data-close
+            aria-label="Close settings"
+          >
+            ×
+          </button>
 
-        <h2>Settings</h2>
+          <h2>Settings</h2>
 
-        <p>Everything here stays gentle and simple.</p>
+          <p>Everything here stays gentle and simple.</p>
 
-        <button type="button" class="soft full" id="reset-data">
-          Reset local session
-        </button>
+          <button type="button" class="soft full" id="reset-data">
+            Reset local session
+          </button>
 
-        <button type="button" class="text-button full" id="logout">
-          Log out
-        </button>
+          <button type="button" class="text-button full" id="logout">
+            Log out
+          </button>
+        </div>
       </div>
-    </div>
-    <!-- =========================================================
+      <!-- =========================================================
      COMING SOON MODAL
 ========================================================== -->
-    <div id="coming-soon-modal" class="modal hidden">
-      <div class="modal-card coming-soon">
-        <button type="button" class="close" data-close aria-label="Close">
-          ×
-        </button>
+      <div id="coming-soon-modal" class="modal hidden">
+        <div class="modal-card coming-soon">
+          <button type="button" class="close" data-close aria-label="Close">
+            ×
+          </button>
 
-        <div class="coming-soon-icon">🔒</div>
+          <div class="coming-soon-icon">🔒</div>
 
-        <h2>More rooms are coming</h2>
+          <h2>More rooms are coming</h2>
 
-        <p class="trait">
-          This room is still being decorated. For now, keep sitting quietly to
-          fill up your first cozy corner.
-        </p>
+          <p class="trait">
+            This room is still being decorated. For now, keep sitting quietly to
+            fill up your first cozy corner.
+          </p>
 
-        <button type="button" class="primary full" data-close>Got it</button>
+          <button type="button" class="primary full" data-close>Got it</button>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <!-- JavaScript -->
-  <script src="./js/app.js"></script>
-</body>
-
+    <!-- JavaScript -->
+    <script src="./js/app.js"></script>
+  </body>
 </html>
