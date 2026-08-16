@@ -1,6 +1,6 @@
 // ==================== CONFIG ====================
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://quietpaws-backend.vercel.app/api";
 
 // ==================== APP ELEMENTS ====================
 

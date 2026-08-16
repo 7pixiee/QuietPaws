@@ -14,6 +14,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({ message: 'QuietPaws API is running live!' });
+});
+app.get('/api', (req, res) => {
+  res.json({ message: 'QuietPaws API is running live!' });
+});
+
 // Mount the 5 REST routes (supporting both / and /api base prefixes)
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
